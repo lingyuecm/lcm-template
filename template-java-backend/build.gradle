@@ -1,0 +1,56 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    ext {
+        springBootVersion = '3.2.0'
+        mysqlVersion = '8.0.27'
+        mybatisVersion = '3.0.3'
+        lombokVersion = '1.18.30'
+        jwtVersion = '4.4.0'
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+}
+apply plugin: 'org.springframework.boot'
+
+group = 'com.lingyuecm'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
+    implementation "org.springframework.security:spring-security-crypto:6.2.0"
+    // Database
+    implementation "mysql:mysql-connector-java:${mysqlVersion}"
+    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisVersion}"
+    // Lombok
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+    // JWT
+    implementation "com.auth0:java-jwt:${jwtVersion}"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation "org.mockito:mockito-core:5.4.0"
+}
+
+test {
+    useJUnitPlatform()
+}

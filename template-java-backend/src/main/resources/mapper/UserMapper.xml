@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingyuecm.mapper.UserMapper">
+    <select id="selectUserCredentials"
+            parameterType="com.lingyuecm.model.BizUser"
+            resultType="com.lingyuecm.dto.BizUserDto">
+        SELECT LOGIN_PWD AS loginPwd
+        FROM BIZ_USER
+        WHERE PHONE_NO = #{phoneNo}
+        AND ENABLED = 1 LIMIT 1;
+    </select>
+</mapper>
