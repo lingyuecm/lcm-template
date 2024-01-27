@@ -1,6 +1,7 @@
 import React from 'react'
 import './Login.css'
 import { refreshCaptchaApi, loginApi } from '../../api/userApi'
+import { setAccessToken } from "../../utils/cacheManager";
 import {Grid} from "@mui/material";
 
 class Login extends React.Component {
@@ -106,7 +107,7 @@ class Login extends React.Component {
         requestBody.token = this.state.token
 
         loginApi(requestBody).then(response => {
-            console.log(response.resultBody.token);
+            setAccessToken(response.resultBody.token);
             window.location.replace("/")
         }).catch(error => {
             alert('Error' + JSON.stringify(error))

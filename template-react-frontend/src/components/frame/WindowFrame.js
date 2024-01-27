@@ -3,6 +3,7 @@ import './WindowFrame.css';
 import {ArrowForward} from "@mui/icons-material";
 import {Routes} from "react-router-dom";
 import {createRoute} from "../../rounter";
+import {getAccessToken} from "../../utils/cacheManager";
 
 export default class WindowFrame extends React.Component {
     constructor(props) {
@@ -22,6 +23,7 @@ export default class WindowFrame extends React.Component {
         }
     }
     render() {
+        const accessToken = getAccessToken();
         return (
             <div className={"Root-window"}>
                 <div className={this.state.sidebarExpanded ? "Sidebar" : "Sidebar Sidebar-folded"}>
@@ -31,7 +33,7 @@ export default class WindowFrame extends React.Component {
                 </div>
                 <div className={this.state.sidebarExpanded ? "Content" : "Content Content-wide"}>
                     <Routes>
-                        { this.props.children.map((child, index) => createRoute(child, index)) }
+                        { this.props.children.map((child, index) => createRoute(child, index, accessToken)) }
                     </Routes>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import Login from '../views/login/Login'
+import Login from "../views/login/Login";
 import Dashboard from "../views/dashboard/Dashboard";
 import WindowFrame from '../components/frame/WindowFrame';
 import {Navigate, Route} from "react-router-dom";
@@ -15,10 +15,6 @@ const routers = [
         component: WindowFrame,
         children: [
             {
-                path: '',
-                redirect: '/dashboard',
-            },
-            {
                 path: 'dashboard',
                 name: 'Dashboard',
                 component: Dashboard
@@ -29,22 +25,25 @@ const routers = [
 
 export default routers
 
-export function createRoute(route, index) {
+export function createRoute(route, index, accessToken) {
     if (route.children && route.children.length > 0) {
-        return (<Route path={route.path} key={index} element={<route.component children={route.children}/>}>
-            { route.children.map((c, i) => createRoute(c, i)) }
+        return (<Route path={route.path} key={index}
+                       element={verifyComponent(<route.component children={route.children}/>, route.path, accessToken)}>
+            {route.children.map((c, i) => createRoute(c, i, accessToken)) }
         </Route>)
     }
     else {
-        return createRedirection(route, index)
+        return <Route path={route.path} key={index} element={verifyComponent(<route.component/>, route.path, accessToken)}/>
     }
 }
 
-function createRedirection(route, index) {
-    if (route.redirect) {
-        return <Route path={route.path} key={index} element={<Navigate to={route.redirect}/>}/>
+function verifyComponent(component, path, accessToken) {
+    if (accessToken || path === "/login") {
+        console.log(accessToken + ":Login: " + path);
+        return component;
     }
     else {
-        return <Route path={route.path} key={index} element={<route.component/>}/>
+        console.log(accessToken + ":NoLogin:" + path);
+        return <Navigate to={"/login"}/>
     }
 }
