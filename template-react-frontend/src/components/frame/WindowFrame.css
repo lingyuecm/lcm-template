@@ -1,0 +1,42 @@
+.Root-window {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+.Sidebar {
+    display: inline-block;
+    width: 20%;
+    height: 100%;
+    background-color: #5982B6;
+    transition-duration: 0.5s;
+}
+.Sidebar-folded {
+    width: 3%;
+    transition-duration: 0.5s;
+}
+.Sidebar-toggle-button {
+    float: right;
+    display: block;
+    width: 3vw;
+    height: 3vw;
+    transition-duration: 0.5s;
+}
+.Sidebar-toggle-button:hover {
+    background-color: #364E6F;
+    cursor: pointer;
+}
+.Sidebar-toggle-button-flipped {
+    transform: rotateY(180deg);
+    transition-duration: 0.5s;
+}
+.Content {
+    display: inline-block;
+    width: 80%;
+    height: 100%;
+    background-color: #FFFFFF;
+    transition-duration: 0.5s;
+}
+.Content-wide {
+    width: 97%;
+    transition-duration: 0.5s;
+}

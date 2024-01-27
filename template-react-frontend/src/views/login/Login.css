@@ -1,0 +1,42 @@
+.Root-container {
+    margin-top: 300px;
+}
+.Input-wrapper {
+    height: 40px;
+}
+.Input-frame {
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+    box-sizing: border-box;
+    border: 1px solid #D2D2D2;
+    border-radius: 10px;
+    padding: 0 10px;
+}
+.Captcha {
+    height: 100%;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+.Login-button {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: #6495ED;
+    border: 1px solid #D2D2D2;
+    border-radius: 10px;
+    align-items: center;
+}
+.Login-button-text {
+    width: 100%;
+    text-align: center;
+}
+.Login-button:hover {
+    background-color: #5485CD;
+}
+.Login-button:active {
+    background-color: #4268A6;
+}
+.Divider {
+    height: 10px;
+}
