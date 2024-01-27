@@ -1,7 +1,7 @@
 import Login from '../views/login/Login'
 import Dashboard from "../views/dashboard/Dashboard";
 import WindowFrame from '../components/frame/WindowFrame';
-import {Route} from "react-router-dom";
+import {Navigate, Route} from "react-router-dom";
 
 const routers = [
     {
@@ -10,12 +10,16 @@ const routers = [
         component: Login
     },
     {
-        path: '/',
+        path: '/*',
         name: 'Home',
         component: WindowFrame,
         children: [
             {
-                path: '/dashboard',
+                path: '',
+                redirect: '/dashboard',
+            },
+            {
+                path: 'dashboard',
                 name: 'Dashboard',
                 component: Dashboard
             }
@@ -32,6 +36,15 @@ export function createRoute(route, index) {
         </Route>)
     }
     else {
-        return (<Route path={route.path} key={index} element={<route.component/>}/>)
+        return createRedirection(route, index)
+    }
+}
+
+function createRedirection(route, index) {
+    if (route.redirect) {
+        return <Route path={route.path} key={index} element={<Navigate to={route.redirect}/>}/>
+    }
+    else {
+        return <Route path={route.path} key={index} element={<route.component/>}/>
     }
 }

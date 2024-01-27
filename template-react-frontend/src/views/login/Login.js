@@ -107,7 +107,7 @@ class Login extends React.Component {
 
         loginApi(requestBody).then(response => {
             console.log(response.resultBody.token);
-            window.location.href = '/dashboard';
+            window.location.replace("/")
         }).catch(error => {
             alert('Error' + JSON.stringify(error))
         })
