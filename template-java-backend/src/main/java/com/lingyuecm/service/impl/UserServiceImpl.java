@@ -1,5 +1,6 @@
 package com.lingyuecm.service.impl;
 
+import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
 import com.lingyuecm.dto.LoginDto;
@@ -91,7 +92,8 @@ public class UserServiceImpl implements UserService {
         }
         LoginDto result = new LoginDto();
 
-        result.setToken("TOKEN");
+        AccessTokenDto tokenDto = this.jwtService.generateAccessToken(userDto.getUserId());
+        result.setToken(tokenDto.getAccessToken());
 
         return result;
     }

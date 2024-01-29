@@ -1,5 +1,6 @@
 package com.lingyuecm.model;
 
+import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
 import com.lingyuecm.dto.LoginDto;
@@ -13,8 +14,10 @@ public class DtoTest {
     public void testBizUserDto() {
         BizUserDto u = new BizUserDto();
 
+        assertDoesNotThrow(() -> u.setUserId(1L));
         assertDoesNotThrow(() -> u.setLoginPwd(""));
 
+        assertNotNull(u.getUserId());
         assertNotNull(u.getLoginPwd());
     }
 
@@ -36,5 +39,16 @@ public class DtoTest {
         assertDoesNotThrow(() -> l.setToken(""));
 
         assertNotNull(l.getToken());
+    }
+
+    @Test
+    public void testAccessTokenDto() {
+        AccessTokenDto t = new AccessTokenDto();
+
+        assertDoesNotThrow(() -> t.setAccessToken(""));
+        assertDoesNotThrow(() -> t.setJwtId(""));
+
+        assertNotNull(t.getAccessToken());
+        assertNotNull(t.getJwtId());
     }
 }

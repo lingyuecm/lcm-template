@@ -4,7 +4,8 @@
     <select id="selectUserCredentials"
             parameterType="com.lingyuecm.model.BizUser"
             resultType="com.lingyuecm.dto.BizUserDto">
-        SELECT LOGIN_PWD AS loginPwd
+        SELECT USER_ID AS userId,
+               LOGIN_PWD AS loginPwd
         FROM BIZ_USER
         WHERE PHONE_NO = #{phoneNo}
         AND ENABLED = 1 LIMIT 1;

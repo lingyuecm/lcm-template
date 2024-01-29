@@ -24,3 +24,7 @@ jwt:
   secrets:
     login-token: ${login_token_secret}
     access-token: ${access_token_secret}
+  access-token-timeout: ${access_token_timeout} # The count of milliseconds in which the access token will expire
+interceptors:
+  token:
+    exclusion-patterns: ${token_exclusion}

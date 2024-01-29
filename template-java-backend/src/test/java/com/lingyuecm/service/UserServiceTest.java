@@ -1,7 +1,9 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
+import com.lingyuecm.dto.LoginDto;
 import com.lingyuecm.mapper.UserMapper;
 import com.lingyuecm.model.BizUser;
 import com.lingyuecm.service.impl.UserServiceImpl;
@@ -25,10 +27,12 @@ import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
     private static final String MOCK_LOGIN_TOKEN = "loginToken";
+    private static final String MOCK_ACCESS_TOKEN = "accessToken";
     private static final String MOCK_CAPTCHA_ID = "captchaId";
     private static final String MOCK_CAPTCHA_1 = "captcha1";
     private static final String MOCK_CAPTCHA_2 = "captcha2";
     private static final String MOCK_PASSWORD = "password1";
+    private static final long MOCK_USER_ID = 1L;
     @InjectMocks
     private UserServiceImpl userService;
     @Mock
@@ -65,9 +69,15 @@ public class UserServiceTest {
         when(this.valueOps.get(any())).thenReturn(MOCK_CAPTCHA_1);
 
         BizUserDto user = new BizUserDto();
+        user.setUserId(MOCK_USER_ID);
         user.setLoginPwd(MOCK_PASSWORD);
         when(this.userMapper.selectUserCredentials(any())).thenReturn(null).thenReturn(user);
         when(this.passwordEncoder.matches(any(), anyString())).thenReturn(false).thenReturn(true);
+
+        AccessTokenDto tokenDto = new AccessTokenDto();
+        tokenDto.setAccessToken("accessToken");
+        tokenDto.setJwtId("jwtId");
+        when(this.jwtService.generateAccessToken(anyLong())).thenReturn(tokenDto);
 
         BizUser bizUser = new BizUser();
         bizUser.setPhoneNo("");
@@ -81,6 +91,8 @@ public class UserServiceTest {
         // Passwords don't match
         assertNull(this.userService.userLogin(bizUser, MOCK_LOGIN_TOKEN, MOCK_CAPTCHA_1));
         // Success
-        assertNotNull(this.userService.userLogin(bizUser, MOCK_LOGIN_TOKEN, MOCK_CAPTCHA_1));
+        LoginDto successDto = this.userService.userLogin(bizUser, MOCK_LOGIN_TOKEN, MOCK_CAPTCHA_1);
+        assertNotNull(successDto);
+        assertEquals(MOCK_ACCESS_TOKEN, successDto.getToken());
     }
 }

@@ -1,5 +1,8 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.dto.AccessTokenDto;
+import com.lingyuecm.dto.AccessTokenVerificationDto;
+
 public interface JwtService {
     /**
      * Generates the token used for logging in
@@ -14,4 +17,14 @@ public interface JwtService {
      * @return The key to the captcha
      */
     String parseLoginToken(String token);
+
+    /**
+     * Generates the access token for the user
+     * @param userId The primary key to the user in the database
+     * @return The access token generated with some additional information
+     * @see AccessTokenDto
+     */
+    AccessTokenDto generateAccessToken(Long userId);
+
+    AccessTokenVerificationDto parseAccessToken(String accessToken);
 }
