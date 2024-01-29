@@ -1,6 +1,5 @@
 package com.lingyuecm.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingyuecm.common.LcmWebResult;
 import com.lingyuecm.common.LcmWebStatus;
@@ -8,6 +7,7 @@ import com.lingyuecm.dto.AccessTokenVerificationDto;
 import com.lingyuecm.service.JwtService;
 import com.lingyuecm.utils.ContextUtils;
 import jakarta.annotation.Resource;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.NonNull;
@@ -17,7 +17,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import static com.lingyuecm.common.Constant.HTTP_HEADER_ACCESS_TOKEN;
 
@@ -32,12 +31,12 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                              @NonNull Object handler) throws IOException {
         String accessToken = request.getHeader(HTTP_HEADER_ACCESS_TOKEN);
-        PrintWriter writer = response.getWriter();
+        ServletOutputStream outputStream = response.getOutputStream();
         /*
         When the user doesn't provide a token, the request will be rejected
          */
         if (null == accessToken || accessToken.isBlank()) {
-            this.writeError(writer, LcmWebStatus.INVALID_ACCESS_TOKEN);
+            this.writeError(outputStream, LcmWebStatus.INVALID_ACCESS_TOKEN);
             return false;
         }
         AccessTokenVerificationDto verificationDto = this.jwtService.parseAccessToken(accessToken);
@@ -45,7 +44,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         When there are errors parsing the token, the request will be rejected
          */
         if (LcmWebStatus.OK != verificationDto.getWebStatus()) {
-            this.writeError(writer, verificationDto.getWebStatus());
+            this.writeError(outputStream, verificationDto.getWebStatus());
             return false;
         }
         /*
@@ -64,9 +63,9 @@ public class TokenInterceptor implements HandlerInterceptor {
         ContextUtils.clearContext();
     }
 
-    private void writeError(PrintWriter writer, LcmWebStatus webStatus) throws JsonProcessingException {
+    private void writeError(ServletOutputStream outputStream, LcmWebStatus webStatus) throws IOException {
         LcmWebResult<Boolean> result = LcmWebResult.failure(webStatus);
 
-        writer.write(this.objectMapper.writeValueAsString(result));
+        outputStream.print(this.objectMapper.writeValueAsString(result));
     }
 }

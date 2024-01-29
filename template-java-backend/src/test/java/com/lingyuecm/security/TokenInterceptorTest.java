@@ -5,6 +5,7 @@ import com.lingyuecm.common.LcmWebStatus;
 import com.lingyuecm.dto.AccessTokenVerificationDto;
 import com.lingyuecm.service.JwtService;
 import com.lingyuecm.utils.ContextUtils;
+import jakarta.servlet.ServletOutputStream;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,7 +15,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import static com.lingyuecm.common.Constant.HTTP_HEADER_ACCESS_TOKEN;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -36,7 +36,7 @@ public class TokenInterceptorTest {
     @Mock
     private MockHttpServletResponse httpResponse;
     @Mock
-    private PrintWriter writer;
+    private ServletOutputStream outputStream;
     @Mock
     private ObjectMapper objectMapper;
     @Mock
@@ -49,9 +49,9 @@ public class TokenInterceptorTest {
     @Test
     public void preHandle_NoToken() throws IOException {
         when(this.httpRequest.getHeader(eq(HTTP_HEADER_ACCESS_TOKEN))).thenReturn(null).thenReturn("\t");
-        when(this.httpResponse.getWriter()).thenReturn(this.writer);
+        when(this.httpResponse.getOutputStream()).thenReturn(this.outputStream);
         when(this.objectMapper.writeValueAsString(any())).thenReturn("error");
-        doNothing().when(this.writer).write(anyString());
+        doNothing().when(this.outputStream).print(anyString());
 
         // Token is NULL
         assertFalse(this.tokenInterceptor.preHandle(this.httpRequest, this.httpResponse, new Object()));
@@ -62,9 +62,9 @@ public class TokenInterceptorTest {
     @Test
     public void preHandle() throws IOException {
         when(this.httpRequest.getHeader(eq(HTTP_HEADER_ACCESS_TOKEN))).thenReturn("accessToken");
-        when(this.httpResponse.getWriter()).thenReturn(this.writer);
+        when(this.httpResponse.getOutputStream()).thenReturn(this.outputStream);
         when(this.objectMapper.writeValueAsString(any())).thenReturn("error");
-        doNothing().when(this.writer).write(anyString());
+        doNothing().when(this.outputStream).print(anyString());
 
         AccessTokenVerificationDto verificationDto = new AccessTokenVerificationDto();
         verificationDto.setWebStatus(LcmWebStatus.INVALID_ACCESS_TOKEN);
