@@ -1,7 +1,13 @@
 import axios from "axios";
+import {getAccessToken} from "./cacheManager";
 
 const service = axios.create({
     baseURL: '/api'
+});
+
+service.interceptors.request.use(config => {
+    config.headers['Access-Token'] = getAccessToken();
+    return config;
 });
 
 service.interceptors.response.use(response => {
@@ -13,6 +19,6 @@ service.interceptors.response.use(response => {
     }
 }, error => {
     return Promise.reject(error)
-})
+});
 
 export default service;

@@ -9,3 +9,7 @@ export function setAccessToken(accessToken) {
 export function getAccessToken() {
     return Cookies.get(ACCESS_TOKEN);
 }
+
+export function removeAccessToken() {
+    Cookies.remove(ACCESS_TOKEN);
+}

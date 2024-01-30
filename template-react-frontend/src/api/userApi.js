@@ -15,3 +15,10 @@ export function loginApi(requestBody) {
         data: requestBody
     })
 }
+
+export function metadataApi() {
+    return service.request({
+        method: 'GET',
+        url: '/user/metadata'
+    })
+}
