@@ -12,4 +12,10 @@ public interface UserMapper {
      * @return The details of the user including the user's credentials, see {@link BizUserDto#getLoginPwd()}
      */
     BizUserDto selectUserCredentials(BizUser user);
+
+    /**
+     * Selects the metadata to display on the web page
+     * @return The metadata desired
+     */
+    BizUserDto selectMetadata();
 }

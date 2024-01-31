@@ -2,6 +2,7 @@ package com.lingyuecm.controller;
 
 import com.lingyuecm.common.LcmWebResult;
 import com.lingyuecm.common.LcmWebStatus;
+import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
 import com.lingyuecm.dto.LoginDto;
 import com.lingyuecm.model.BizUser;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -49,5 +51,11 @@ public class UserController {
             return LcmWebResult.failure(LcmWebStatus.FAILED_TO_LOGIN);
         }
         return LcmWebResult.success(result);
+    }
+
+    @RequestMapping(value = "/metadata", method = {RequestMethod.GET})
+    public LcmWebResult<BizUserDto> metadata() {
+        BizUserDto userDto = this.userService.getMetadata();
+        return LcmWebResult.success(userDto);
     }
 }

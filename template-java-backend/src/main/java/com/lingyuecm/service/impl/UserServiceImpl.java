@@ -16,7 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -96,6 +98,11 @@ public class UserServiceImpl implements UserService {
         result.setToken(tokenDto.getAccessToken());
 
         return result;
+    }
+
+    @Override
+    public BizUserDto getMetadata() {
+        return this.userMapper.selectMetadata();
     }
 
     private String getCaptchaImageBase64(int captchaWidth, int captchaHeight, String captcha) throws IOException {

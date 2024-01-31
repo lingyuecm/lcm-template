@@ -1,8 +1,8 @@
-package com.lingyuecm;
+package com.lingyuecm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingyuecm.common.LcmWebStatus;
-import com.lingyuecm.controller.UserController;
+import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
 import com.lingyuecm.dto.LoginDto;
 import com.lingyuecm.exception.LcmExceptionHandler;
@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,6 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     private static final String MOCK_TOKEN = "token";
     private static final String MOCK_CAPTCHA = "captchaBase64";
+    private static final String MOCK_FIRST_NAME = "FFF";
+    private static final String MOCK_LAST_NAME = "LLL";
     @InjectMocks
     private UserController userController;
     @Mock
@@ -134,6 +137,22 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
                 .andExpect(jsonPath("$.resultBody.token").value(MOCK_TOKEN))
+                .andReturn();
+    }
+
+    @Test
+    public void metadata() throws Exception {
+        BizUserDto userDto = new BizUserDto();
+        userDto.setFirstName(MOCK_FIRST_NAME);
+        userDto.setLastName(MOCK_LAST_NAME);
+        when(this.userService.getMetadata()).thenReturn(userDto);
+
+        this.mockMvc.perform(get("/user/metadata"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
+                .andExpect(jsonPath("$.resultBody.firstName").value(MOCK_FIRST_NAME))
+                .andExpect(jsonPath("$.resultBody.lastName").value(MOCK_LAST_NAME))
                 .andReturn();
     }
 }

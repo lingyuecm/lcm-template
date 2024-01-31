@@ -1,5 +1,6 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
 import com.lingyuecm.dto.LoginDto;
 import com.lingyuecm.model.BizUser;
@@ -23,4 +24,11 @@ public interface UserService {
      * @see LoginDto
      */
     LoginDto userLogin(BizUser user, String loginToken, String captcha);
+
+    /**
+     * Gets the metadata to display on the web page
+     * @return The metadata desired
+     * @see BizUserDto
+     */
+    BizUserDto getMetadata();
 }

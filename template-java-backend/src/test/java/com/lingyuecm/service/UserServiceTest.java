@@ -33,6 +33,8 @@ public class UserServiceTest {
     private static final String MOCK_CAPTCHA_2 = "captcha2";
     private static final String MOCK_PASSWORD = "password1";
     private static final long MOCK_USER_ID = 1L;
+    private static final String MOCK_FIRST_NAME = "FFF";
+    private static final String MOCK_LAST_NAME = "LLL";
     @InjectMocks
     private UserServiceImpl userService;
     @Mock
@@ -94,5 +96,17 @@ public class UserServiceTest {
         LoginDto successDto = this.userService.userLogin(bizUser, MOCK_LOGIN_TOKEN, MOCK_CAPTCHA_1);
         assertNotNull(successDto);
         assertEquals(MOCK_ACCESS_TOKEN, successDto.getToken());
+    }
+
+    @Test
+    public void getMetadata() {
+        BizUserDto userDto = new BizUserDto();
+        userDto.setFirstName(MOCK_FIRST_NAME);
+        userDto.setLastName(MOCK_LAST_NAME);
+        when(this.userMapper.selectMetadata()).thenReturn(userDto);
+
+        BizUserDto result = this.userService.getMetadata();
+        assertEquals(MOCK_FIRST_NAME, result.getFirstName());
+        assertEquals(MOCK_LAST_NAME, result.getLastName());
     }
 }

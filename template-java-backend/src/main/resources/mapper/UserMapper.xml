@@ -10,4 +10,20 @@
         WHERE PHONE_NO = #{phoneNo}
         AND ENABLED = 1 LIMIT 1;
     </select>
+    <select id="selectMetadata"
+            resultType="com.lingyuecm.dto.BizUserDto">
+        <bind name="userId" value="@com.lingyuecm.utils.ContextUtils@getUserId()"/>
+        SELECT FIRST_NAME AS firstName,
+               LAST_NAME AS lastName
+        FROM BIZ_USER
+        WHERE USER_ID = #{userId};
+    </select>
+    <select id="manageUsers"
+            resultType="com.lingyuecm.dto.BizUserDto">
+        SELECT USER_ID AS userId,
+               FIRST_NAME AS firstName,
+               LAST_NAME AS lastName
+        FROM BIZ_USER
+        LIMIT #{pageData.offset}, #{pageData.pageSize};
+    </select>
 </mapper>
