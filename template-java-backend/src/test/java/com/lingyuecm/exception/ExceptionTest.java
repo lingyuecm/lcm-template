@@ -31,4 +31,15 @@ public class ExceptionTest {
         assertNotNull(result);
         assertEquals(LcmWebStatus.INTERNAL_SERVER_ERROR.getStatusCode(), result.getResultCode());
     }
+
+    @Test
+    public void handleConventionViolationException() {
+        String message = "errorMessage";
+        ConventionViolationException e = new ConventionViolationException(message);
+        assertEquals(message, e.getMessage());
+
+        LcmWebResult<Boolean> result = this.exceptionHandler.handleConventionViolationException(e);
+        assertNotNull(result);
+        assertEquals(LcmWebStatus.CONVENTION_VIOLATED.getStatusCode(), result.getResultCode());
+    }
 }

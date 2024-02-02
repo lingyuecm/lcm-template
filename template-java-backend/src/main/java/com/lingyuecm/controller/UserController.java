@@ -11,9 +11,10 @@ import com.lingyuecm.request.RefreshCaptchaRequest;
 import com.lingyuecm.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,7 +27,7 @@ public class UserController {
      * Gets a new captcha
      * @see RefreshCaptchaRequest
      */
-    @RequestMapping(value = "/captcha", method = {RequestMethod.POST})
+    @PostMapping(value = "/captcha")
     public LcmWebResult<CaptchaDto> captcha(@RequestBody @Validated RefreshCaptchaRequest request) {
         return LcmWebResult.success(this.userService.generateCaptcha(
                 request.getCaptchaWidth(),
@@ -37,7 +38,7 @@ public class UserController {
      * Logs the user in
      * @see LoginRequest
      */
-    @RequestMapping(value = "/login", method = {RequestMethod.POST})
+    @PostMapping(value = "/login")
     public LcmWebResult<LoginDto> validateLogin(@RequestBody @Validated LoginRequest request) {
         BizUser user = new BizUser();
         user.setPhoneNo(request.getPhoneNo());
@@ -53,7 +54,7 @@ public class UserController {
         return LcmWebResult.success(result);
     }
 
-    @RequestMapping(value = "/metadata", method = {RequestMethod.GET})
+    @GetMapping(value = "/metadata")
     public LcmWebResult<BizUserDto> metadata() {
         BizUserDto userDto = this.userService.getMetadata();
         return LcmWebResult.success(userDto);
