@@ -2,10 +2,13 @@ package com.lingyuecm.controller;
 
 import com.lingyuecm.common.LcmWebResult;
 import com.lingyuecm.common.LcmWebStatus;
+import com.lingyuecm.common.PageData;
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
 import com.lingyuecm.dto.LoginDto;
 import com.lingyuecm.model.BizUser;
+import com.lingyuecm.request.GetUsersRequest;
 import com.lingyuecm.request.LoginRequest;
 import com.lingyuecm.request.RefreshCaptchaRequest;
 import com.lingyuecm.service.UserService;
@@ -58,5 +61,16 @@ public class UserController {
     public LcmWebResult<BizUserDto> metadata() {
         BizUserDto userDto = this.userService.getMetadata();
         return LcmWebResult.success(userDto);
+    }
+
+    /**
+     * Gets the user list for the admin
+     * @param request The request data
+     * @param pageData The pagination data
+     */
+    @GetMapping(value = "/users")
+    public LcmWebResult<PagedList<BizUserDto>> users(GetUsersRequest request, @SuppressWarnings("unused") PageData pageData) {
+        PagedList<BizUserDto> result = this.userService.getUsers(request.getCriteria());
+        return LcmWebResult.success(result);
     }
 }

@@ -1,5 +1,6 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
 import com.lingyuecm.dto.LoginDto;
@@ -31,4 +32,12 @@ public interface UserService {
      * @see BizUserDto
      */
     BizUserDto getMetadata();
+
+    /**
+     * Gets the user list on one page
+     * @param criteria The criteria for searching
+     * @return The data on the page
+     * @see BizUserDto
+     */
+    PagedList<BizUserDto> getUsers(String criteria);
 }

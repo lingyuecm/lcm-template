@@ -2,6 +2,7 @@ package com.lingyuecm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingyuecm.common.LcmWebStatus;
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
 import com.lingyuecm.dto.LoginDto;
@@ -17,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -31,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     private static final String MOCK_TOKEN = "token";
     private static final String MOCK_CAPTCHA = "captchaBase64";
+    private static final String MOCK_PHONE_NO = "123456";
     private static final String MOCK_FIRST_NAME = "FFF";
     private static final String MOCK_LAST_NAME = "LLL";
     @InjectMocks
@@ -154,5 +158,35 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.resultBody.firstName").value(MOCK_FIRST_NAME))
                 .andExpect(jsonPath("$.resultBody.lastName").value(MOCK_LAST_NAME))
                 .andReturn();
+    }
+
+    @Test
+    public void getUsers() throws Exception {
+        BizUserDto userDto = new BizUserDto();
+        userDto.setPhoneNo(MOCK_PHONE_NO);
+        userDto.setFirstName(MOCK_FIRST_NAME);
+        userDto.setLastName(MOCK_LAST_NAME);
+
+        long totalCount = 12;
+
+        when(this.userService.getUsers(anyString())).thenReturn(PagedList.empty())
+                .thenReturn(PagedList.paginated(totalCount, new ArrayList<>(){{add(userDto);}}));
+
+        // Empty
+        this.mockMvc.perform(get("/user/users?criteria=AAA&pageNo=1&pageSize=10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
+                .andExpect(jsonPath("$.resultBody.totalCount").value(0L));
+
+        // One user with mock data
+        this.mockMvc.perform(get("/user/users?criteria=AAA&pageNo=1&pageSize=10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
+                .andExpect(jsonPath("$.resultBody.totalCount").value(totalCount))
+                .andExpect(jsonPath("$.resultBody.dataList[0].phoneNo").value(MOCK_PHONE_NO))
+                .andExpect(jsonPath("$.resultBody.dataList[0].firstName").value(MOCK_FIRST_NAME))
+                .andExpect(jsonPath("$.resultBody.dataList[0].lastName").value(MOCK_LAST_NAME));
     }
 }

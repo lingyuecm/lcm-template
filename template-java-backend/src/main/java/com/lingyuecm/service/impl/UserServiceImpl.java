@@ -1,5 +1,6 @@
 package com.lingyuecm.service.impl;
 
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
@@ -23,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -103,6 +105,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public BizUserDto getMetadata() {
         return this.userMapper.selectMetadata();
+    }
+
+    @Override
+    public PagedList<BizUserDto> getUsers(String criteria) {
+        List<BizUserDto> result = this.userMapper.manageUsers(criteria);
+        if (null == result || result.isEmpty()) {
+            return PagedList.empty();
+        }
+        return PagedList.paginated(this.userMapper.selectUserCount(criteria), result);
     }
 
     private String getCaptchaImageBase64(int captchaWidth, int captchaHeight, String captcha) throws IOException {

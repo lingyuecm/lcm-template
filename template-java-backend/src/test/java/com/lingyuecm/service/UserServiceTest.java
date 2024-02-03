@@ -1,5 +1,6 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
@@ -14,6 +15,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,6 +36,7 @@ public class UserServiceTest {
     private static final String MOCK_CAPTCHA_2 = "captcha2";
     private static final String MOCK_PASSWORD = "password1";
     private static final long MOCK_USER_ID = 1L;
+    private static final String MOCK_PHONE_NO = "123456";
     private static final String MOCK_FIRST_NAME = "FFF";
     private static final String MOCK_LAST_NAME = "LLL";
     @InjectMocks
@@ -108,5 +112,36 @@ public class UserServiceTest {
         BizUserDto result = this.userService.getMetadata();
         assertEquals(MOCK_FIRST_NAME, result.getFirstName());
         assertEquals(MOCK_LAST_NAME, result.getLastName());
+    }
+
+    @Test
+    public void getUsers() {
+        BizUserDto userDto = new BizUserDto();
+        userDto.setPhoneNo(MOCK_PHONE_NO);
+        userDto.setFirstName(MOCK_FIRST_NAME);
+        userDto.setLastName(MOCK_LAST_NAME);
+        when(this.userMapper.manageUsers(anyString())).thenReturn(null)
+                .thenReturn(new ArrayList<>())
+                .thenReturn(new ArrayList<>(){{add(userDto);}});
+        // NULL
+        PagedList<BizUserDto> result = this.userService.getUsers("criteria");
+        this.getUsersAssertionsEmpty(result);
+        // Empty list
+        result = this.userService.getUsers("criteria");
+        this.getUsersAssertionsEmpty(result);
+        // Non-Empty list
+        long totalCount = 100L;
+        when(this.userMapper.selectUserCount(anyString())).thenReturn(totalCount);
+        result = this.userService.getUsers("criteria");
+        assertNotNull(result);
+        assertEquals(totalCount, result.getTotalCount());
+        assertNotNull(result.getDataList());
+        assertEquals(1, result.getDataList().size());
+    }
+    private void getUsersAssertionsEmpty(PagedList<BizUserDto> result) {
+        assertNotNull(result);
+        assertEquals(0L, result.getTotalCount());
+        assertNotNull(result.getDataList());
+        assertEquals(0, result.getDataList().size());
     }
 }

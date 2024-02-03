@@ -8,6 +8,7 @@ import lombok.Setter;
  * The details of a user, including the following fields
  * <li>{@link #userId}</li>
  * <li>{@link #loginPwd}</li>
+ * <li>{@link #phoneNo}</li>
  * <li>@{@link #firstName}</li>
  * <li>@{@link #lastName}</li>
  */
@@ -23,6 +24,7 @@ public class BizUserDto {
      */
     @JsonIgnore // Shouldn't be returned to the frontend, even though it has been encrypted
     private String loginPwd;
+    private String phoneNo;
     private String firstName;
     private String lastName;
 }

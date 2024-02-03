@@ -18,12 +18,31 @@
         FROM BIZ_USER
         WHERE USER_ID = #{userId};
     </select>
+
+    <sql id="userConditions">
+        WHERE (1 = 1)
+        <if test="null != criteria">
+            AND (FIRST_NAME LIKE CONCAT('%', #{criteria}, '%') OR
+            LAST_NAME LIKE CONCAT('%', #{criteria}, '%') OR
+            PHONE_NO LIKE CONCAT('%', #{criteria}, '%'))
+        </if>
+    </sql>
     <select id="manageUsers"
             resultType="com.lingyuecm.dto.BizUserDto">
+        <bind name="pageSize" value="@com.lingyuecm.utils.ContextUtils@getPageSize()"/>
+        <bind name="offset" value="@com.lingyuecm.utils.ContextUtils@getOffset()"/>
         SELECT USER_ID AS userId,
+               PHONE_NO AS phoneNo,
                FIRST_NAME AS firstName,
                LAST_NAME AS lastName
         FROM BIZ_USER
-        LIMIT #{pageData.offset}, #{pageData.pageSize};
+        <include refid="userConditions"/>
+        LIMIT #{offset}, #{pageSize};
+    </select>
+    <select id="selectUserCount"
+            resultType="long">
+        SELECT COUNT(USER_ID)
+        FROM BIZ_USER
+        <include refid="userConditions"/>;
     </select>
 </mapper>

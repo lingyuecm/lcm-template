@@ -1,5 +1,6 @@
 package com.lingyuecm.model;
 
+import com.lingyuecm.request.GetUsersRequest;
 import com.lingyuecm.request.LoginRequest;
 import com.lingyuecm.request.RefreshCaptchaRequest;
 import org.junit.jupiter.api.Test;
@@ -32,5 +33,14 @@ public class RequestTest {
 
         assertNotNull(r.getCaptchaWidth());
         assertNotNull(r.getCaptchaHeight());
+    }
+
+    @Test
+    public void testGetUsersRequest() {
+        GetUsersRequest r = new GetUsersRequest();
+
+        assertDoesNotThrow(() -> r.setCriteria(""));
+
+        assertNotNull(r.getCriteria());
     }
 }

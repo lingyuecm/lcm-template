@@ -4,6 +4,8 @@ import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.model.BizUser;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     /**
@@ -18,4 +20,14 @@ public interface UserMapper {
      * @return The metadata desired
      */
     BizUserDto selectMetadata();
+
+    /**
+     * Selects the user list for the admin
+     */
+    List<BizUserDto> manageUsers(String criteria);
+
+    /**
+     * Selects the total count of users by certain criteria
+     */
+    long selectUserCount(String criteria);
 }
