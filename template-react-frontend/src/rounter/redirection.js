@@ -10,5 +10,7 @@ const redirections = [
 export default redirections;
 
 export function createRedirection(redirection, index) {
-    return <Route path={redirection.path} key={index} element={<Navigate to={redirection.redirect}/>}/>
+    return <Route path={redirection.path} key={index} element={<Navigate to={redirection.redirect} state={{
+        from: redirection.path
+    }}/>}/>
 }

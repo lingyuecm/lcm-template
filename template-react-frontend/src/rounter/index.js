@@ -2,6 +2,7 @@ import Login from "../views/login/Login";
 import Dashboard from "../views/dashboard/Dashboard";
 import WindowFrame from '../components/frame/WindowFrame';
 import {Navigate, Route} from "react-router-dom";
+import UserManagement from "../views/management/UserManagement";
 
 const routers = [
     {
@@ -18,6 +19,18 @@ const routers = [
                 path: 'dashboard',
                 name: 'Dashboard',
                 component: Dashboard
+            }
+        ]
+    },
+    {
+        path: '/backendMgmt/*',
+        name: 'Backend Management',
+        component: WindowFrame,
+        children: [
+            {
+                path: 'userMgmt',
+                name: 'User Management',
+                component: UserManagement
             }
         ]
     }
@@ -39,11 +52,9 @@ export function createRoute(route, index, accessToken) {
 
 function verifyComponent(component, path, accessToken) {
     if (accessToken || path === "/login") {
-        console.log(accessToken + ":Login: " + path);
         return component;
     }
     else {
-        console.log(accessToken + ":NoLogin:" + path);
         return <Navigate to={"/login"}/>
     }
 }

@@ -17,6 +17,10 @@
     width: 5rem;
     transition-duration: 0.5s;
 }
+.Sidebar-toggle-button-wrapper {
+    width: 100%;
+    height: 5rem;
+}
 .Sidebar-toggle-button {
     float: right;
     display: block;

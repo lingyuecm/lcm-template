@@ -8,6 +8,7 @@ import {setSidebarExpanded} from "../../store/sidebarSlice";
 import {useEffect} from "react";
 import {metadataApi} from "../../api/userApi";
 import {setPersonName} from "../../store/personNameSlice";
+import SidebarItem from "../SidebarItem";
 
 export default function WindowFrame(props) {
     const sidebarExpanded = useSelector(state => state.sidebar.sidebarExpanded);
@@ -45,18 +46,24 @@ export default function WindowFrame(props) {
         removeAccessToken();
         window.location.reload();
     }
+    let menuTree = useSelector(state => state.menu.menuTree);
 
     return (
         <div className={"Root-window"}>
             <div className={sidebarExpanded ? "Sidebar" : "Sidebar Sidebar-folded"}>
-                <div className={sidebarExpanded ? "Sidebar-toggle-button Sidebar-toggle-button-flipped" : "Sidebar-toggle-button"} onClick={onSidebarToggle}>
-                    <ArrowForward style={styles.sidebarToggleArrow}/>
+                <div className={"Sidebar-toggle-button-wrapper"}>
+                    <div
+                        className={sidebarExpanded ? "Sidebar-toggle-button Sidebar-toggle-button-flipped" : "Sidebar-toggle-button"}
+                        onClick={onSidebarToggle}>
+                        <ArrowForward style={styles.sidebarToggleArrow}/>
+                    </div>
                 </div>
+                <SidebarItem items={menuTree} indent={2} parentKey={0}/>
             </div>
             <div className={sidebarExpanded ? "Content" : "Content Content-wide"}>
                 <div className={"Top-bar"}>
                     <div className={"Person-name"}>
-                        <div className={"Hello"}>Hello,&nbsp;</div>
+                    <div className={"Hello"}>Hello,&nbsp;</div>
                         <div className={"Person-name-text"}>
                             { usePersonName() }
                         </div>
