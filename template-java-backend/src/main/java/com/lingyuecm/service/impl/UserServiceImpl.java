@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
@@ -110,8 +111,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public PagedList<BizUserDto> getUsers(String criteria) {
         List<BizUserDto> result = this.userMapper.manageUsers(criteria);
-        if (null == result || result.isEmpty()) {
-            return PagedList.empty();
+        if (null == result) {
+            result = new ArrayList<>();
         }
         return PagedList.paginated(this.userMapper.selectUserCount(criteria), result);
     }
