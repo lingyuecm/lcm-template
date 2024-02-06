@@ -9,6 +9,7 @@ export default function SidebarItem(props) {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const sidebarExpanded = useSelector(state => state.sidebar.sidebarExpanded);
     let expandedKeys = useSelector(state => state.menu.expandedKeys);
     let currentMenuPath = useSelector(state => state.menu.currentMenuPath);
     const expandArrowSize = "1.8rem";
@@ -54,35 +55,43 @@ export default function SidebarItem(props) {
             props.items.map((menu, index) => {
                 const elementKey = getElementKey([props.parentKey, index]);
 
-                if (menu.children) {
-                    return [
-                        <div className={"Sidebar-menu-item"} style={{
+                if (sidebarExpanded) {
+                    if (menu.children) {
+                        return [
+                            <div className={"Sidebar-menu-item"} style={{
+                                textIndent: props.indent + "ch"
+                            }} key={elementKey} onClick={() => onSubmenuClick(elementKey)}>
+                                { menu.title }
+                                <KeyboardArrowUp style={expandedKeys.includes(elementKey) ? {
+                                    width: expandArrowSize,
+                                    height: expandArrowSize,
+                                    marginLeft: "1rem"
+                                } : {
+                                    width: expandArrowSize,
+                                    height: expandArrowSize,
+                                    marginLeft: "1rem",
+                                    transform: "rotateX(180deg)"
+                                }}/>
+                            </div>,
+                            <div className={expandedKeys.includes(elementKey) ? "Submenu-wrapper" : "Submenu-wrapper Submenu-wrapper-hidden"}>
+                                <SidebarItem items={menu.children} indent={props.indent + 2} parentKey={elementKey}/>
+                            </div>
+                        ]
+                    }
+                    else {
+                        return <div className={(menu.path === currentMenuPath || menu.path === location.state.from) ?
+                            "Sidebar-menu-item Current-item" : "Sidebar-menu-item"} style={{
                             textIndent: props.indent + "ch"
-                        }} key={elementKey} onClick={() => onSubmenuClick(elementKey)}>
+                        }} key={elementKey}
+                                    onClick={() => onMenuItemClick(menu.path)}>
                             { menu.title }
-                            <KeyboardArrowUp style={expandedKeys.includes(elementKey) ? {
-                                width: expandArrowSize,
-                                height: expandArrowSize,
-                                marginLeft: "1rem"
-                            } : {
-                                width: expandArrowSize,
-                                height: expandArrowSize,
-                                marginLeft: "1rem",
-                                transform: "rotateX(180deg)"
-                            }}/>
-                        </div>,
-                        <div className={expandedKeys.includes(elementKey) ? "Submenu-wrapper" : "Submenu-wrapper Submenu-wrapper-hidden"}>
-                            <SidebarItem items={menu.children} indent={props.indent + 2} parentKey={elementKey}/>
                         </div>
-                    ]
+                    }
                 }
                 else {
-                    return <div className={(menu.path === currentMenuPath || menu.path === location.state.from) ?
-                        "Sidebar-menu-item Current-item" : "Sidebar-menu-item"} style={{
-                            textIndent: props.indent + "ch"
-                    }} key={elementKey}
-                    onClick={() => onMenuItemClick(menu.path)}>
-                        { menu.title }
+                    // Display the menus on the first level only
+                    return <div className={"Sidebar-menu-item Sidebar-item-abbreviation"}>
+                        <div className={"Sidebar-menu-item-abbreviation-text"}>{menu.title[0]}</div>
                     </div>
                 }
             })

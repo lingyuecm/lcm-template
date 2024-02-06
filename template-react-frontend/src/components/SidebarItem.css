@@ -4,6 +4,7 @@
     height: 5rem;
     font-size: 1.5rem;
     align-items: center;
+    overflow-x: hidden;
 }
 .Sidebar-menu-item:hover {
     background-color: #364E6F;
@@ -22,4 +23,15 @@
     background-color: #364E6F;
     color: #E7A158;
     font-weight: bold;
+}
+.Sidebar-item-abbreviation {
+    color: #D2D2D2;
+    font-size: 2rem;
+    font-weight: 1000;
+}
+.Sidebar-menu-item-abbreviation-text {
+    display: block;
+    width: 100%;
+    text-align: center;
+    opacity: 80%;
 }

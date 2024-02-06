@@ -70,7 +70,7 @@ export default function WindowFrame(props) {
                     </div>
                     <div className={"Logout-button"} onClick={logout}>Logout</div>
                 </div>
-                <div style={{paddingLeft: "5px"}}>
+                <div className={"Route-content"}>
                     <Routes>
                         { props.children.map((child, index) => createRoute(child, index, accessToken)) }
                     </Routes>

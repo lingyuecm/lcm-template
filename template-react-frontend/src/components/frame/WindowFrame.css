@@ -37,6 +37,7 @@
     transition-duration: 0.5s;
 }
 .Content {
+    position: relative;
     display: inline-block;
     width: calc(100% - 30rem);
     height: 100%;
@@ -83,4 +84,12 @@
 }
 .Logout-button:active {
     background-color: #8A6036;
+}
+.Route-content {
+    position: absolute;
+    left: 0;
+    top: 5rem;
+    right: 0;
+    bottom: 0;
+    padding: 5px;
 }

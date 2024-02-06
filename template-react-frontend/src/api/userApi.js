@@ -22,3 +22,11 @@ export function metadataApi() {
         url: '/user/metadata'
     })
 }
+
+export function getUsersApi(params) {
+    return service.request({
+        method: 'GET',
+        url: '/user/users',
+        params: params
+    })
+}
