@@ -3,6 +3,7 @@ package com.lingyuecm.model;
 import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
+import com.lingyuecm.dto.ConfRoleDto;
 import com.lingyuecm.dto.LoginDto;
 import org.junit.jupiter.api.Test;
 
@@ -50,5 +51,16 @@ public class DtoTest {
 
         assertNotNull(t.getAccessToken());
         assertNotNull(t.getJwtId());
+    }
+
+    @Test
+    public void testConfRoleDto() {
+        ConfRoleDto r = new ConfRoleDto();
+
+        assertDoesNotThrow(() -> r.setRoleId(1));
+        assertDoesNotThrow(() -> r.setRoleName(""));
+
+        assertNotNull(r.getRoleId());
+        assertNotNull(r.getRoleName());
     }
 }

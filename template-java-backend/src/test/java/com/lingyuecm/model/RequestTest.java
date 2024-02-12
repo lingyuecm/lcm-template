@@ -1,9 +1,12 @@
 package com.lingyuecm.model;
 
 import com.lingyuecm.request.GetUsersRequest;
+import com.lingyuecm.request.GrantRolesRequest;
 import com.lingyuecm.request.LoginRequest;
 import com.lingyuecm.request.RefreshCaptchaRequest;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -42,5 +45,14 @@ public class RequestTest {
         assertDoesNotThrow(() -> r.setCriteria(""));
 
         assertNotNull(r.getCriteria());
+    }
+
+    @Test
+    public void testGrantRolesRequest() {
+        GrantRolesRequest r = new GrantRolesRequest();
+
+        assertDoesNotThrow(() -> r.setRoleIds(new ArrayList<>()));
+
+        assertNotNull(r.getRoleIds());
     }
 }

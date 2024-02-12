@@ -75,4 +75,25 @@ public class ModelTest {
         assertNotNull(emptyList.getDataList());
         assertEquals(0, emptyList.getDataList().size());
     }
+
+    @Test
+    public void testConfRole() {
+        ConfRole r = new ConfRole();
+
+        assertDoesNotThrow(() -> r.setRoleId(1));
+        assertDoesNotThrow(() -> r.setRoleName(""));
+        assertDoesNotThrow(() -> r.setEnabled(1));
+        assertDoesNotThrow(() -> r.setCreatedBy(1L));
+        assertDoesNotThrow(() -> r.setTimeCreated(new Date()));
+        assertDoesNotThrow(() -> r.setUpdatedBy(1L));
+        assertDoesNotThrow(() -> r.setTimeUpdated(new Date()));
+
+        assertNotNull(r.getRoleId());
+        assertNotNull(r.getRoleName());
+        assertNotNull(r.getEnabled());
+        assertNotNull(r.getCreatedBy());
+        assertNotNull(r.getTimeCreated());
+        assertNotNull(r.getUpdatedBy());
+        assertNotNull(r.getTimeUpdated());
+    }
 }
