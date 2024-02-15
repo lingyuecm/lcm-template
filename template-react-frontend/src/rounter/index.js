@@ -1,36 +1,48 @@
 import Login from "../views/login/Login";
 import Dashboard from "../views/dashboard/Dashboard";
-import WindowFrame from '../components/frame/WindowFrame';
+import WindowFrame from "../components/frame/WindowFrame";
 import {Navigate, Route} from "react-router-dom";
 import UserManagement from "../views/management/UserManagement";
+import RoleManagement from "../views/management/RoleManagement";
+import PermissionManagement from "../views/management/PermissionManagement";
 
 const routers = [
     {
-        path: '/login',
-        name: 'Login',
+        path: "/login",
+        name: "Login",
         component: Login
     },
     {
-        path: '/*',
-        name: 'Home',
+        path: "/*",
+        name: "Home",
         component: WindowFrame,
         children: [
             {
-                path: 'dashboard',
-                name: 'Dashboard',
+                path: "dashboard",
+                name: "Dashboard",
                 component: Dashboard
             }
         ]
     },
     {
-        path: '/backendMgmt/*',
-        name: 'Backend Management',
+        path: "/backendMgmt/*",
+        name: "Backend Management",
         component: WindowFrame,
         children: [
             {
-                path: 'userMgmt',
-                name: 'User Management',
+                path: "userMgmt",
+                name: "User Management",
                 component: UserManagement
+            },
+            {
+                path: "roleMgmt",
+                name: "Role Management",
+                component: RoleManagement
+            },
+            {
+                path: "permissionMgmt",
+                name: "Permission management",
+                component: PermissionManagement
             }
         ]
     }
