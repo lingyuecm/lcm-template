@@ -86,8 +86,14 @@ const userTableTheme = createTheme({
         MuiTableHead: {
             styleOverrides: {
                 root: {
-                    backgroundColor: colorBlue,
-                    borderRadius: "1rem"
+                    backgroundColor: colorBlue
+                }
+            }
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                head: {
+                    fontSize: "1.8rem"
                 }
             }
         },
@@ -95,8 +101,7 @@ const userTableTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderLeft: "1px solid " + colorGreyD2,
-                    borderRight: "1px solid " + colorGreyD2,
-                    boxSizing: "content-box"
+                    borderRight: "1px solid " + colorGreyD2
                 }
             }
         },
@@ -232,11 +237,11 @@ export default function UserManagement() {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell style={{borderTopLeftRadius: "1rem", fontSize: "1.8rem", borderRight: "1px solid #B2B2B2"}}
+                        <TableCell style={{borderTopLeftRadius: "1rem", borderRight: "1px solid #B2B2B2"}}
                                    align={"center"}>Name</TableCell>
-                        <TableCell style={{fontSize: "1.8rem", borderRight: "1px solid #B2B2B2"}}
+                        <TableCell style={{borderRight: "1px solid #B2B2B2"}}
                                    align={"center"}>Phone No.</TableCell>
-                        <TableCell style={{fontSize: "1.8rem", borderTopRightRadius: "1rem"}} align={"center"}>Actions</TableCell>
+                        <TableCell style={{borderTopRightRadius: "1rem"}} align={"center"}>Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -251,7 +256,7 @@ export default function UserManagement() {
                     })}
                 </TableBody>
             </Table>
-            <Pagination style={{float: "right", marginTop: "1rem", fontSize: "1.5rem"}} count={pages} page={pageNo}
+            <Pagination style={{float: "right", marginTop: "1rem"}} count={pages} page={pageNo}
                         onChange={(e, page) => {setPageNo(page)}}/>
             <UserTotalCount>{totalCount} in total</UserTotalCount>
         </ThemeProvider>
