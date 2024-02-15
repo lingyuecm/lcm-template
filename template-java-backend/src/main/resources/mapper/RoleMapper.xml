@@ -6,7 +6,7 @@
         SELECT ROLE_ID AS roleId,
                ROLE_NAME AS roleName
         FROM CONF_ROLE
-        WHERE ENABLED = 1;
+        WHERE STATUS = 1;
     </select>
     <select id="selectUserRoles"
             resultType="com.lingyuecm.dto.ConfRoleDto">
