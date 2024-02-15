@@ -1,9 +1,64 @@
-import "./SidebarItem.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import {KeyboardArrowUp} from "@mui/icons-material";
 import {useDispatch, useSelector} from "react-redux";
 import {appendExpandedKey, removeExpandedKey, setCurrentMenuPath} from "../store/menuSlice";
 import {useEffect} from "react";
+import styled from "styled-components";
+import {colorBlueDark, colorBlueDarker, colorGreyD2, colorOrange} from "../utils/constant";
+
+const SidebarItemBase = styled.div`
+    display: flex;
+    width: 100%;
+    height: 5rem;
+    font-size: 1.5rem;
+    text-indent: ${props => props.indent + "ch"};
+    align-items: center;
+    overflow-x: hidden;
+    &:hover {
+        cursor: pointer;
+        background-color: ${() => colorBlueDark};
+    }
+`
+
+const SubmenuWrapper = styled.div`
+    width: 100%;
+    height: ${props => {
+        return props.parentExpanded ? "auto" : "0"
+    }};
+    overflow-y: hidden;
+    transition-duration: 0.5s;
+`
+
+const SidebarItemLeaf = styled(SidebarItemBase)`
+    color: ${props => {
+        return props.current ? colorOrange : "inherit"
+    }};
+    font-weight: ${props => {
+        return props.current ? 1000 : "inherit"
+    }};
+    background-color: ${props => {
+        return props.current ? colorBlueDarker : "inherit"
+    }};
+    &:hover {
+        cursor: pointer;
+        background-color: ${props => {
+            return props.current ? colorBlueDarker : colorBlueDark
+        }};
+    }
+`
+
+const SidebarItemAbbreviation = styled(SidebarItemBase)`
+    color: ${() => colorGreyD2};
+    font-size: 2rem;
+    font-weight: 1000;
+`
+
+const SidebarItemAbbreviationText = styled.div`
+    display: block;
+    width: 100%;
+    text-align: center;
+    opacity: 80%;
+`
 
 export default function SidebarItem(props) {
     const location = useLocation();
@@ -58,9 +113,9 @@ export default function SidebarItem(props) {
                 if (sidebarExpanded) {
                     if (menu.children) {
                         return [
-                            <div className={"Sidebar-menu-item"} style={{
-                                textIndent: props.indent + "ch"
-                            }} key={elementKey} onClick={() => onSubmenuClick(elementKey)}>
+                            <SidebarItemBase
+                                indent={props.indent}
+                                key={elementKey} onClick={() => onSubmenuClick(elementKey)}>
                                 { menu.title }
                                 <KeyboardArrowUp style={expandedKeys.includes(elementKey) ? {
                                     width: expandArrowSize,
@@ -72,27 +127,25 @@ export default function SidebarItem(props) {
                                     marginLeft: "1rem",
                                     transform: "rotateX(180deg)"
                                 }}/>
-                            </div>,
-                            <div className={expandedKeys.includes(elementKey) ? "Submenu-wrapper" : "Submenu-wrapper Submenu-wrapper-hidden"}>
+                            </SidebarItemBase>,
+                            <SubmenuWrapper parentExpanded={expandedKeys.includes(elementKey)}>
                                 <SidebarItem items={menu.children} indent={props.indent + 2} parentKey={elementKey}/>
-                            </div>
+                            </SubmenuWrapper>
                         ]
                     }
                     else {
-                        return <div className={(menu.path === currentMenuPath || menu.path === location.state.from) ?
-                            "Sidebar-menu-item Current-item" : "Sidebar-menu-item"} style={{
-                            textIndent: props.indent + "ch"
-                        }} key={elementKey}
-                                    onClick={() => onMenuItemClick(menu.path)}>
+                        return <SidebarItemLeaf current={(menu.path === currentMenuPath || menu.path === location.state.from)} indent={props.indent}
+                            key={elementKey}
+                            onClick={() => onMenuItemClick(menu.path)}>
                             { menu.title }
-                        </div>
+                        </SidebarItemLeaf>
                     }
                 }
                 else {
                     // Display the menus on the first level only
-                    return <div className={"Sidebar-menu-item Sidebar-item-abbreviation"}>
-                        <div className={"Sidebar-menu-item-abbreviation-text"}>{menu.title[0]}</div>
-                    </div>
+                    return <SidebarItemAbbreviation>
+                        <SidebarItemAbbreviationText>{menu.title[0]}</SidebarItemAbbreviationText>
+                    </SidebarItemAbbreviation>
                 }
             })
         }
