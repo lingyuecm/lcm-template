@@ -10,7 +10,7 @@ import java.util.Date;
 public class ConfRole {
     private Integer roleId;
     private String roleName;
-    private Integer enabled;
+    private Integer status;
     private Long createdBy;
     private Date timeCreated;
     private Long updatedBy;

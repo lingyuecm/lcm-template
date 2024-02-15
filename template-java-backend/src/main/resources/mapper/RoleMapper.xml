@@ -33,4 +33,27 @@
             (#{userId}, #{roleId})
         </foreach>;
     </insert>
+    <sql id="roleConditions">
+        WHERE (1 = 1)
+        <if test="null != criteria">
+            AND ROLE_NAME LIKE CONCAT('%', #{criteria}, '%')
+        </if>
+    </sql>
+    <select id="manageRoles"
+            resultType="com.lingyuecm.dto.ConfRoleDto">
+        <bind name="pageSize" value="@com.lingyuecm.utils.ContextUtils@getPageSize()"/>
+        <bind name="offset" value="@com.lingyuecm.utils.ContextUtils@getOffset()"/>
+        SELECT ROLE_ID AS roleId,
+               ROLE_NAME AS roleName,
+               STATUS AS status
+        FROM CONF_ROLE
+        <include refid="roleConditions"/>
+        LIMIT #{offset}, #{pageSize};
+    </select>
+    <select id="selectRoleCount"
+            resultType="long">
+        SELECT COUNT(ROLE_ID)
+        FROM CONF_ROLE
+        <include refid="roleConditions"/>;
+    </select>
 </mapper>

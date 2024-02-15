@@ -2,6 +2,7 @@ package com.lingyuecm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingyuecm.common.LcmWebStatus;
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfRoleDto;
 import com.lingyuecm.exception.LcmExceptionHandler;
 import com.lingyuecm.request.GrantRolesRequest;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -31,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RoleControllerTest {
     private static final int MOCK_ROLE_ID = 1;
     private static final String MOCK_ROLE_NAME = "Role1";
+    private static final int MOCK_STATUS = 1;
 
     @InjectMocks
     private RoleController roleController;
@@ -100,6 +103,26 @@ public class RoleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
                 .andExpect(jsonPath("$.resultBody").value(0))
+                .andReturn();
+    }
+
+    @Test
+    public void roles() throws Exception {
+        long totalCount = 100L;
+        ConfRoleDto roleDto = new ConfRoleDto();
+        roleDto.setRoleId(MOCK_ROLE_ID);
+        roleDto.setRoleName(MOCK_ROLE_NAME);
+        roleDto.setStatus(MOCK_STATUS);
+        when(this.roleService.getRoles(anyString()))
+                .thenReturn(PagedList.paginated(totalCount, new ArrayList<>(){{add(roleDto);}}));
+        this.mockMvc.perform(get("/role/roles?criteria=AAA&pageNo=1&pageSize=10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
+                .andExpect(jsonPath("$.resultBody.totalCount").value(totalCount))
+                .andExpect(jsonPath("$.resultBody.dataList[0].roleId").value(MOCK_ROLE_ID))
+                .andExpect(jsonPath("$.resultBody.dataList[0].roleName").value(MOCK_ROLE_NAME))
+                .andExpect(jsonPath("$.resultBody.dataList[0].status").value(MOCK_STATUS))
                 .andReturn();
     }
 }

@@ -22,7 +22,7 @@ public class ModelTest {
         assertDoesNotThrow(() -> u.setPhoneNo(""));
         assertDoesNotThrow(() -> u.setLoginPwd(""));
         assertDoesNotThrow(() -> u.setRealName(""));
-        assertDoesNotThrow(() -> u.setEnabled(1));
+        assertDoesNotThrow(() -> u.setStatus(1));
         assertDoesNotThrow(() -> u.setCreatedBy(1L));
         assertDoesNotThrow(() -> u.setTimeCreated(new Date()));
         assertDoesNotThrow(() -> u.setUpdatedBy(1L));
@@ -32,7 +32,7 @@ public class ModelTest {
         assertNotNull(u.getPhoneNo());
         assertNotNull(u.getLoginPwd());
         assertNotNull(u.getRealName());
-        assertNotNull(u.getEnabled());
+        assertNotNull(u.getStatus());
         assertNotNull(u.getCreatedBy());
         assertNotNull(u.getTimeCreated());
         assertNotNull(u.getUpdatedBy());
@@ -82,7 +82,7 @@ public class ModelTest {
 
         assertDoesNotThrow(() -> r.setRoleId(1));
         assertDoesNotThrow(() -> r.setRoleName(""));
-        assertDoesNotThrow(() -> r.setEnabled(1));
+        assertDoesNotThrow(() -> r.setStatus(1));
         assertDoesNotThrow(() -> r.setCreatedBy(1L));
         assertDoesNotThrow(() -> r.setTimeCreated(new Date()));
         assertDoesNotThrow(() -> r.setUpdatedBy(1L));
@@ -90,7 +90,7 @@ public class ModelTest {
 
         assertNotNull(r.getRoleId());
         assertNotNull(r.getRoleName());
-        assertNotNull(r.getEnabled());
+        assertNotNull(r.getStatus());
         assertNotNull(r.getCreatedBy());
         assertNotNull(r.getTimeCreated());
         assertNotNull(r.getUpdatedBy());

@@ -1,7 +1,10 @@
 package com.lingyuecm.controller;
 
 import com.lingyuecm.common.LcmWebResult;
+import com.lingyuecm.common.PageData;
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfRoleDto;
+import com.lingyuecm.request.GetRolesRequest;
 import com.lingyuecm.request.GrantRolesRequest;
 import com.lingyuecm.service.RoleService;
 import jakarta.annotation.Resource;
@@ -47,5 +50,14 @@ public class RoleController {
                                            @RequestBody @Validated GrantRolesRequest request) {
         this.roleService.grantRolesToUser(userId, request.getRoleIds());
         return LcmWebResult.success(0);
+    }
+
+    /**
+     * Gets the role list for the admin
+     */
+    @GetMapping("/roles")
+    public LcmWebResult<PagedList<ConfRoleDto>> roles(GetRolesRequest request, @SuppressWarnings("unused") PageData pageData) {
+        PagedList<ConfRoleDto> result = this.roleService.getRoles(request.getCriteria());
+        return LcmWebResult.success(result);
     }
 }

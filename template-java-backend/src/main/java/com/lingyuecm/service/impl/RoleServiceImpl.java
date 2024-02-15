@@ -1,5 +1,6 @@
 package com.lingyuecm.service.impl;
 
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfRoleDto;
 import com.lingyuecm.mapper.RoleMapper;
 import com.lingyuecm.service.RoleService;
@@ -47,5 +48,14 @@ public class RoleServiceImpl implements RoleService {
         if (!roleIds.isEmpty()) {
             this.roleMapper.insertUserRoles(userId, roleIds);
         }
+    }
+
+    @Override
+    public PagedList<ConfRoleDto> getRoles(String criteria) {
+        List<ConfRoleDto> result = this.roleMapper.manageRoles(criteria);
+        if (null == result) {
+            result = new ArrayList<>();
+        }
+        return PagedList.paginated(this.roleMapper.selectRoleCount(criteria), result);
     }
 }

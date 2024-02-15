@@ -59,8 +59,10 @@ public class DtoTest {
 
         assertDoesNotThrow(() -> r.setRoleId(1));
         assertDoesNotThrow(() -> r.setRoleName(""));
+        assertDoesNotThrow(() -> r.setStatus(1));
 
         assertNotNull(r.getRoleId());
         assertNotNull(r.getRoleName());
+        assertNotNull(r.getStatus());
     }
 }

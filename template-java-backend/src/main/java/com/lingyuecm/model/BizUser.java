@@ -12,7 +12,7 @@ public class BizUser {
     private String phoneNo;
     private String loginPwd;
     private String realName;
-    private Integer enabled;
+    private Integer status;
     private Long createdBy;
     private Date timeCreated;
     private Long updatedBy;

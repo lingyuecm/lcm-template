@@ -33,4 +33,13 @@ public interface RoleMapper {
      */
     void insertUserRoles(@Param("userId") Long userId,
                          @Param("roleIds") List<Integer> roleIds);
+
+    /**
+     * Selects the role list for the admin
+     */
+    List<ConfRoleDto> manageRoles(String criteria);
+    /**
+     * Selects the total count of roles by certain criteria
+     */
+    long selectRoleCount(String criteria);
 }

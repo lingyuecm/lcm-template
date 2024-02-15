@@ -1,5 +1,6 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfRoleDto;
 import com.lingyuecm.mapper.RoleMapper;
 import com.lingyuecm.service.impl.RoleServiceImpl;
@@ -16,12 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 public class RoleServiceTest {
     private static final int MOCK_ROLE_ID = 1;
     private static final String MOCK_ROLE_NAME = "Role1";
+    private static final int MOCK_STATUS = 1;
     @InjectMocks
     private RoleServiceImpl roleService;
 
@@ -79,5 +82,29 @@ public class RoleServiceTest {
         assertDoesNotThrow(() -> this.roleService.grantRolesToUser(1L, new ArrayList<>()));
         // Grant some roles
         assertDoesNotThrow(() -> this.roleService.grantRolesToUser(1L, new ArrayList<>(){{add(1);add(2);}}));
+    }
+
+    @Test
+    public void getRoles() {
+        ConfRoleDto roleDto = new ConfRoleDto();
+        roleDto.setRoleId(MOCK_ROLE_ID);
+        roleDto.setRoleName(MOCK_ROLE_NAME);
+        roleDto.setStatus(MOCK_STATUS);
+        when(this.roleMapper.manageRoles(anyString()))
+                .thenReturn(null)
+                .thenReturn(new ArrayList<>(){{add(roleDto);}});
+        PagedList<ConfRoleDto> result = this.roleService.getRoles("criteria");
+        assertNotNull(result);
+        assertEquals(0L, result.getTotalCount());
+        assertNotNull(result.getDataList());
+        assertEquals(0, result.getDataList().size());
+
+        long totalCount = 100L;
+        when(this.roleMapper.selectRoleCount(anyString())).thenReturn(totalCount);
+        result = this.roleService.getRoles("criteria");
+        assertNotNull(result);
+        assertEquals(totalCount, result.getTotalCount());
+        assertNotNull(result.getDataList());
+        assertEquals(1, result.getDataList().size());
     }
 }

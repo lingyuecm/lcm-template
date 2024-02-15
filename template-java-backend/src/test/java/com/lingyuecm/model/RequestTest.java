@@ -1,5 +1,6 @@
 package com.lingyuecm.model;
 
+import com.lingyuecm.request.GetRolesRequest;
 import com.lingyuecm.request.GetUsersRequest;
 import com.lingyuecm.request.GrantRolesRequest;
 import com.lingyuecm.request.LoginRequest;
@@ -54,5 +55,14 @@ public class RequestTest {
         assertDoesNotThrow(() -> r.setRoleIds(new ArrayList<>()));
 
         assertNotNull(r.getRoleIds());
+    }
+
+    @Test
+    public void testGetRolesRequest() {
+        GetRolesRequest r = new GetRolesRequest();
+
+        assertDoesNotThrow(() -> r.setCriteria(""));
+
+        assertNotNull(r.getCriteria());
     }
 }

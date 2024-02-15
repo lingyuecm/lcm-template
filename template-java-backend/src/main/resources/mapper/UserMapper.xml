@@ -8,7 +8,7 @@
                LOGIN_PWD AS loginPwd
         FROM BIZ_USER
         WHERE PHONE_NO = #{phoneNo}
-        AND ENABLED = 1 LIMIT 1;
+        AND STATUS = 1 LIMIT 1;
     </select>
     <select id="selectMetadata"
             resultType="com.lingyuecm.dto.BizUserDto">

@@ -1,5 +1,6 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfRoleDto;
 
 import java.util.List;
@@ -26,4 +27,12 @@ public interface RoleService {
      * @param roleIds The role IDs to grant to the user
      */
     void grantRolesToUser(Long userId, List<Integer> roleIds);
+
+    /**
+     * Gets the role list on one page
+     * @param criteria The criteria for searching
+     * @return The data on the page
+     * @see ConfRoleDto
+     */
+    PagedList<ConfRoleDto> getRoles(String criteria);
 }
