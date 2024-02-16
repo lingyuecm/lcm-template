@@ -11,6 +11,7 @@ public enum LcmWebStatus {
     FAILED_TO_LOGIN(-4, "Failed to login"),
     INVALID_ACCESS_TOKEN(-5, "Invalid access token"),
     INVALID_PARAMETER(-400, "Invalid parameter"),
+    UNAUTHORIZED(-403, "Unauthorized"),
     INTERNAL_SERVER_ERROR(-500, "Internal Server Error"),
     CONVENTION_VIOLATED(-501, "Convention violated");
 

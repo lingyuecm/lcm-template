@@ -1,5 +1,6 @@
 package com.lingyuecm.controller;
 
+import com.lingyuecm.annotation.NoPermissionVerification;
 import com.lingyuecm.common.LcmWebResult;
 import com.lingyuecm.common.LcmWebStatus;
 import com.lingyuecm.common.PageData;
@@ -30,6 +31,7 @@ public class UserController {
      * Gets a new captcha
      * @see RefreshCaptchaRequest
      */
+    @NoPermissionVerification
     @PostMapping(value = "/captcha")
     public LcmWebResult<CaptchaDto> captcha(@RequestBody @Validated RefreshCaptchaRequest request) {
         return LcmWebResult.success(this.userService.generateCaptcha(
@@ -41,6 +43,7 @@ public class UserController {
      * Logs the user in
      * @see LoginRequest
      */
+    @NoPermissionVerification
     @PostMapping(value = "/login")
     public LcmWebResult<LoginDto> validateLogin(@RequestBody @Validated LoginRequest request) {
         BizUser user = new BizUser();

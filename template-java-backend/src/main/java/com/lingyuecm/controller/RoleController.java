@@ -43,7 +43,7 @@ public class RoleController {
     }
 
     /**
-     * Grants roles for the user
+     * Grants roles to the user
      */
     @PostMapping("/roles/{userId}")
     public LcmWebResult<Integer> userRoles(@PathVariable Long userId,
