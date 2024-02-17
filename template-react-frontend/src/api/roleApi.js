@@ -21,3 +21,11 @@ export function grantRolesApi(userId, roleIds) {
         data: { roleIds }
     })
 }
+
+export function getRolesApi(params) {
+    return service.request({
+        method: 'GET',
+        url: '/role/roles',
+        params
+    })
+}
