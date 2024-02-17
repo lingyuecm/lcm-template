@@ -1,11 +1,14 @@
 package com.lingyuecm.service.impl;
 
+import com.lingyuecm.common.Constant;
 import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
+import com.lingyuecm.dto.ConfPermissionDto;
 import com.lingyuecm.dto.LoginDto;
 import com.lingyuecm.exception.LcmRuntimeException;
+import com.lingyuecm.mapper.PermissionMapper;
 import com.lingyuecm.mapper.UserMapper;
 import com.lingyuecm.model.BizUser;
 import com.lingyuecm.service.JwtService;
@@ -27,8 +30,10 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.lingyuecm.common.LcmWebStatus.FAILED_TO_GENERATE_CAPTCHA;
 
@@ -41,6 +46,8 @@ public class UserServiceImpl implements UserService {
     private JwtService jwtService;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private PermissionMapper permissionMapper;
     @Resource
     private StringRedisTemplate redisTemplate;
     @Resource
@@ -99,6 +106,7 @@ public class UserServiceImpl implements UserService {
 
         AccessTokenDto tokenDto = this.jwtService.generateAccessToken(userDto.getUserId());
         result.setToken(tokenDto.getAccessToken());
+        this.cacheUserPermissions(userDto.getUserId());
 
         return result;
     }
@@ -128,5 +136,25 @@ public class UserServiceImpl implements UserService {
         ImageIO.write(bi, "png", bos);
 
         return Base64.getEncoder().encodeToString(bos.toByteArray());
+    }
+
+    private void cacheUserPermissions(Long userId) {
+        List<ConfPermissionDto> userPermissions = this.permissionMapper.selectUserPermissions(userId);
+        if (null == userPermissions) {
+            userPermissions = new ArrayList<>();
+        }
+        Set<String> permissionSet = userPermissions.stream()
+                .map(p -> p.getHttpMethod() + " " + p.getPermissionUrl())
+                .collect(Collectors.toSet());
+        if (permissionSet.isEmpty()) {
+            /*
+            Redis couldn't set empty sets at a key, so when the user doesn't have any permissions,
+            a placeholder will be added to the "empty set"
+             */
+            permissionSet.add("* /**");
+        }
+        String userPermissionKey = Constant.REDIS_PREFIX_USER_PERMISSION + userId;
+        this.redisTemplate.delete(userPermissionKey);
+        this.redisTemplate.opsForSet().add(userPermissionKey, permissionSet.toArray(String[]::new));
     }
 }

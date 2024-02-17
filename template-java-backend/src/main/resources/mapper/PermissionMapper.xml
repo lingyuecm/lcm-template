@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingyuecm.mapper.PermissionMapper">
+    <select id="selectUserPermissions"
+            resultType="com.lingyuecm.dto.ConfPermissionDto">
+        SELECT P.HTTP_METHOD AS httpMethod,
+               P.PERMISSION_URL AS permissionUrl
+        FROM (
+            SELECT ROLE_ID,
+                   PERMISSION_ID
+            FROM MAP_ROLE_PERMISSION
+            WHERE ROLE_ID IN (
+                SELECT ROLE_ID
+                FROM MAP_USER_ROLE
+                WHERE USER_ID = #{userId})) MRP
+        LEFT JOIN (
+            SELECT PERMISSION_ID,
+                   HTTP_METHOD,
+                   PERMISSION_URL
+            FROM CONF_PERMISSION) P ON MRP.PERMISSION_ID = P.PERMISSION_ID;
+    </select>
+</mapper>
