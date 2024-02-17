@@ -1,10 +1,10 @@
 import {useLocation, useNavigate} from "react-router-dom";
 import {KeyboardArrowUp} from "@mui/icons-material";
 import {useDispatch, useSelector} from "react-redux";
-import {appendExpandedKey, removeExpandedKey, setCurrentMenuPath} from "../store/menuSlice";
+import {appendExpandedKey, removeExpandedKey, setCurrentMenuPath} from "../../store/menuSlice";
 import {useEffect} from "react";
 import styled from "styled-components";
-import {colorBlueDark, colorBlueDarker, colorGreyD2, colorOrange} from "../utils/constant";
+import {colorBlueDark, colorBlueDarker, colorGreyD2, colorOrange} from "../../utils/constant";
 
 const SidebarItemBase = styled.div`
     display: flex;

@@ -7,7 +7,7 @@ import {setSidebarExpanded} from "../../store/sidebarSlice";
 import {useEffect} from "react";
 import {metadataApi} from "../../api/userApi";
 import {setPersonName} from "../../store/personNameSlice";
-import SidebarItem from "../SidebarItem";
+import SidebarItem from "./SidebarItem";
 import styled from "styled-components";
 import {colorBlueDark, colorOrange, colorOrangeDark, colorOrangeDarker} from "../../utils/constant";
 import {createTheme, ThemeProvider} from "@mui/material";
