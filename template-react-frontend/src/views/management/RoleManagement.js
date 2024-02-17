@@ -96,7 +96,7 @@ export default function RoleManagement() {
                 setTotalCount(response["resultBody"]["totalCount"]);
                 setPages(Math.floor((response["resultBody"]["totalCount"] + pageSize - 1) / pageSize));
                 setRoles(response["resultBody"]["dataList"]);
-            })
+            }).catch(() => {});
     }
 
     useEffect(() => {

@@ -144,7 +144,7 @@ export default function WindowFrame(props) {
                 firstName: response.resultBody.firstName,
                 lastName: response.resultBody.lastName
             }));
-        });
+        }).catch(() => {});
     }, [dispatch]);
 
     function usePersonName() {

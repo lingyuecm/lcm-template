@@ -181,7 +181,7 @@ export default function UserManagement() {
                 setTotalCount(response.resultBody.totalCount);
                 setPages(Math.floor((response.resultBody.totalCount + pageSize - 1) / pageSize));
                 setUsers(response.resultBody.dataList);
-            });
+            }).catch(() => {});
     }
 
     function getAllRoles() {
@@ -193,8 +193,8 @@ export default function UserManagement() {
                         role.checked = userRoleIds.includes(role.roleId);
                     });
                     setAllRoles(response.resultBody);
-                });
-            });
+                }).catch(() => {});
+            }).catch(() => {});
     }
 
     function onRolesClick(userId) {

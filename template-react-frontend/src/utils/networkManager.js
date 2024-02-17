@@ -1,5 +1,6 @@
 import axios from "axios";
 import {getAccessToken} from "./cacheManager";
+import ToastUtils from "./ToastUtils";
 
 const service = axios.create({
     baseURL: '/api'
@@ -15,9 +16,11 @@ service.interceptors.response.use(response => {
         return response.data;
     }
     else {
+        ToastUtils.showError(response.data["resultMessage"]);
         return Promise.reject(response.data)
     }
 }, error => {
+    ToastUtils.showError(error.message);
     return Promise.reject(error)
 });
 

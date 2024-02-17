@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
 import {Provider} from "react-redux";
 import store from "./store";
+import Toast from "./components/Toast";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
       <BrowserRouter>
           <Provider store={store}>
               <App/>
+              <Toast/>
           </Provider>
       </BrowserRouter>
   </React.StrictMode>,

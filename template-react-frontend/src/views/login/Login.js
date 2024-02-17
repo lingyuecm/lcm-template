@@ -24,6 +24,9 @@ const CaptchaImage = styled.img`
     height: 100%;
     margin-left: 1rem;
     border-radius: 0.5rem;
+    &:hover {
+        cursor: pointer;
+    }
 `
 
 const LoginButton = styled.div`
@@ -36,6 +39,7 @@ const LoginButton = styled.div`
     border-radius: 1rem;
     align-items: center;
     &:hover {
+        cursor: pointer;
         background-color: ${() => colorBlueDark}
     }
     &:active {
@@ -91,9 +95,7 @@ export default function Login() {
         }).then(response => {
             setCaptchaBase64('data:image/png;base64,' + response["resultBody"]["captchaImage"]);
             setToken(response["resultBody"].token);
-        }).catch(error => {
-            alert('Error: ' + JSON.stringify(error))
-        })
+        }).catch(() => {});
     }
 
     function login() {
@@ -106,9 +108,7 @@ export default function Login() {
         loginApi(requestBody).then(response => {
             setAccessToken(response["resultBody"].token);
             window.location.href = "/";
-        }).catch(error => {
-            alert('Error' + JSON.stringify(error))
-        })
+        }).catch(() => {});
     }
 
     useEffect(() => {
@@ -121,7 +121,6 @@ export default function Login() {
                 <Grid item xs={4}></Grid>
                 <Grid item xs={4}>
                     <InputFrame placeholder={"Phone Number"} onChange={onPhoneNoChange}/>
-                    {/*<input className={"Input-frame"} placeholder={"Phone Number"} onChange={onPhoneNoChange}/>*/}
                 </Grid>
                 <Grid item xs={4}></Grid>
             </Grid>
