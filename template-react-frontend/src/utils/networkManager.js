@@ -1,6 +1,9 @@
 import axios from "axios";
-import {getAccessToken} from "./cacheManager";
+import {getAccessToken, removeAccessToken} from "./cacheManager";
 import ToastUtils from "./ToastUtils";
+
+const STATUS_OK = 0;
+const STATUS_INVALID_TOKEN = -5;
 
 const service = axios.create({
     baseURL: '/api'
@@ -12,8 +15,15 @@ service.interceptors.request.use(config => {
 });
 
 service.interceptors.response.use(response => {
-    if (response.data.resultCode === 0) {
+    if (response.data.resultCode === STATUS_OK) {
         return response.data;
+    }
+    else if (response.data.resultCode === STATUS_INVALID_TOKEN) {
+        ToastUtils.showError(response.data["resultMessage"]);
+        removeAccessToken();
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
     }
     else {
         ToastUtils.showError(response.data["resultMessage"]);
