@@ -2,6 +2,7 @@ package com.lingyuecm.model;
 
 import com.lingyuecm.request.GetRolesRequest;
 import com.lingyuecm.request.GetUsersRequest;
+import com.lingyuecm.request.GrantPermissionsRequest;
 import com.lingyuecm.request.GrantRolesRequest;
 import com.lingyuecm.request.LoginRequest;
 import com.lingyuecm.request.RefreshCaptchaRequest;
@@ -64,5 +65,14 @@ public class RequestTest {
         assertDoesNotThrow(() -> r.setCriteria(""));
 
         assertNotNull(r.getCriteria());
+    }
+
+    @Test
+    public void testGrantPermissionsRequest() {
+        GrantPermissionsRequest r = new GrantPermissionsRequest();
+
+        assertDoesNotThrow(() -> r.setPermissionIds(new ArrayList<>()));
+
+        assertNotNull(r.getPermissionIds());
     }
 }

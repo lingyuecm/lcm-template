@@ -58,7 +58,7 @@ public class RoleControllerTest {
         roleDto.setRoleId(MOCK_ROLE_ID);
         roleDto.setRoleName(MOCK_ROLE_NAME);
         when(this.roleService.getAllRoles()).thenReturn(new ArrayList<>(){{add(roleDto);}});
-        this.mockMvc.perform(get("/role/allRoles"))
+        this.mockMvc.perform(get("/role/roles/all"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))

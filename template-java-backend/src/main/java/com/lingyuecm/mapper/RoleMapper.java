@@ -15,6 +15,7 @@ public interface RoleMapper {
 
     /**
      * Selects all roles granted to the user
+     * @param userId The user ID
      */
     List<ConfRoleDto> selectUserRoles(Long userId);
 
@@ -28,7 +29,7 @@ public interface RoleMapper {
     /**
      * Grants roles to the user
      * @param userId The user ID
-     * @param roleIds The role IDs
+     * @param roleIds The role IDs to grant to the user
      * @see #deleteUserRoles(Long)
      */
     void insertUserRoles(@Param("userId") Long userId,

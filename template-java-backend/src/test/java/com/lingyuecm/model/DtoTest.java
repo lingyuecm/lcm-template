@@ -71,9 +71,11 @@ public class DtoTest {
     public void testConfPermissionDto() {
         ConfPermissionDto p = new ConfPermissionDto();
 
+        assertDoesNotThrow(() -> p.setPermissionId(1));
         assertDoesNotThrow(() -> p.setHttpMethod(""));
         assertDoesNotThrow(() -> p.setPermissionUrl(""));
 
+        assertNotNull(p.getPermissionId());
         assertNotNull(p.getHttpMethod());
         assertNotNull(p.getPermissionUrl());
     }

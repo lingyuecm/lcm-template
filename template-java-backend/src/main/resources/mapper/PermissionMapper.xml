@@ -19,4 +19,41 @@
                    PERMISSION_URL
             FROM CONF_PERMISSION) P ON MRP.PERMISSION_ID = P.PERMISSION_ID;
     </select>
+    <select id="selectAllPermissions"
+            resultType="com.lingyuecm.dto.ConfPermissionDto">
+        SELECT PERMISSION_ID AS permissionId,
+               HTTP_METHOD AS httpMethod,
+               PERMISSION_URL AS permissionUrl
+        FROM CONF_PERMISSION
+        WHERE STATUS = 1;
+    </select>
+    <select id="selectRolePermissions"
+            resultType="com.lingyuecm.dto.ConfPermissionDto">
+        SELECT M.PERMISSION_ID AS permissionId,
+               P.HTTP_METHOD AS httpMethod,
+               P.PERMISSION_URL AS permissionUrl
+        FROM (
+            SELECT PERMISSION_ID
+            FROM MAP_ROLE_PERMISSION
+            WHERE ROLE_ID = #{roleId}) M
+        LEFT JOIN (
+            SELECT PERMISSION_ID,
+                   HTTP_METHOD,
+                   PERMISSION_URL
+            FROM CONF_PERMISSION) P ON M.PERMISSION_ID = P.PERMISSION_ID;
+    </select>
+    <delete id="deleteRolePermissions">
+        DELETE FROM MAP_ROLE_PERMISSION
+        WHERE ROLE_ID = #{roleId};
+    </delete>
+    <insert id="insertRolePermissions">
+        INSERT INTO MAP_ROLE_PERMISSION
+        (
+         ROLE_ID,
+         PERMISSION_ID
+        )
+        <foreach collection="permissionIds" item="permissionId" open="" separator="" close="">
+            (#{roleId}, #{permissionId})
+        </foreach>;
+    </insert>
 </mapper>

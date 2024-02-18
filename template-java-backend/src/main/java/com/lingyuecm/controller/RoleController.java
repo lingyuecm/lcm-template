@@ -27,7 +27,7 @@ public class RoleController {
     /**
      * Gets all available roles of the system
      */
-    @GetMapping("/allRoles")
+    @GetMapping("/roles/all")
     public LcmWebResult<List<ConfRoleDto>> allRoles() {
         List<ConfRoleDto> result = this.roleService.getAllRoles();
         return LcmWebResult.success(result);
