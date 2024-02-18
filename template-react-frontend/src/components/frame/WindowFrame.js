@@ -5,7 +5,7 @@ import {getAccessToken, removeAccessToken} from "../../utils/cacheManager";
 import {useDispatch, useSelector} from "react-redux";
 import {setSidebarExpanded} from "../../store/sidebarSlice";
 import {useEffect} from "react";
-import {metadataApi} from "../../api/userApi";
+import {logoutApi, metadataApi} from "../../api/userApi";
 import {setPersonName} from "../../store/personNameSlice";
 import SidebarItem from "./SidebarItem";
 import styled from "styled-components";
@@ -154,8 +154,10 @@ export default function WindowFrame(props) {
     }
 
     function logout() {
-        removeAccessToken();
-        window.location.reload();
+        logoutApi().then(() => {
+            removeAccessToken();
+            window.location.reload();
+        }).catch(() => {});
     }
     let menuTree = useSelector(state => state.menu.menuTree);
 
