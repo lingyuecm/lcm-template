@@ -13,6 +13,7 @@ import com.lingyuecm.mapper.UserMapper;
 import com.lingyuecm.model.BizUser;
 import com.lingyuecm.service.JwtService;
 import com.lingyuecm.service.UserService;
+import com.lingyuecm.utils.ContextUtils;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -114,6 +115,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public BizUserDto getMetadata() {
         return this.userMapper.selectMetadata();
+    }
+
+    @Override
+    public void userLogout() {
+        /*
+        On logging the user out, the following things need doing
+        1. Clear the cached permissions of the user
+         */
+        // 1
+        this.redisTemplate.delete(Constant.REDIS_PREFIX_USER_PERMISSION + ContextUtils.getUserId());
     }
 
     @Override

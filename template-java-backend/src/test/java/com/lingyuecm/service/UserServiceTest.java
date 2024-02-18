@@ -10,6 +10,7 @@ import com.lingyuecm.mapper.PermissionMapper;
 import com.lingyuecm.mapper.UserMapper;
 import com.lingyuecm.model.BizUser;
 import com.lingyuecm.service.impl.UserServiceImpl;
+import com.lingyuecm.utils.ContextUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -133,6 +135,14 @@ public class UserServiceTest {
         BizUserDto result = this.userService.getMetadata();
         assertEquals(MOCK_FIRST_NAME, result.getFirstName());
         assertEquals(MOCK_LAST_NAME, result.getLastName());
+    }
+
+    @Test
+    public void userLogout() {
+        ContextUtils.setUserId(1L);
+        when(this.redisTemplate.delete(anyString())).thenReturn(true);
+        assertDoesNotThrow(() -> this.userService.userLogout());
+        ContextUtils.clearContext();
     }
 
     @Test

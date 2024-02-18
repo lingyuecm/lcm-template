@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -157,6 +158,16 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
                 .andExpect(jsonPath("$.resultBody.firstName").value(MOCK_FIRST_NAME))
                 .andExpect(jsonPath("$.resultBody.lastName").value(MOCK_LAST_NAME))
+                .andReturn();
+    }
+
+    @Test
+    public void logout() throws Exception {
+        doNothing().when(this.userService).userLogout();
+        this.mockMvc.perform(post("/user/logout"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
                 .andReturn();
     }
 

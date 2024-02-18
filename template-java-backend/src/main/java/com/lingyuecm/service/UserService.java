@@ -34,6 +34,11 @@ public interface UserService {
     BizUserDto getMetadata();
 
     /**
+     * Logs the user out
+     */
+    void userLogout();
+
+    /**
      * Gets the user list on one page
      * @param criteria The criteria for searching
      * @return The data on the page

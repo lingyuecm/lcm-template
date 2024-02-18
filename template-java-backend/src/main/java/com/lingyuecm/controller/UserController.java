@@ -67,6 +67,15 @@ public class UserController {
     }
 
     /**
+     * Logs the user out
+     */
+    @PostMapping("/logout")
+    public LcmWebResult<Integer> logout() {
+        this.userService.userLogout();
+        return LcmWebResult.success(0);
+    }
+
+    /**
      * Gets the user list for the admin
      * @param request The request data
      * @param pageData The pagination data
