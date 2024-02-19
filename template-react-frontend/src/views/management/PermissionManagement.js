@@ -232,7 +232,7 @@ export default function PermissionManagement() {
         }
     ];
 
-    const [httpMethod, setHttpMethod] = useState("");
+    const [httpMethod, setHttpMethod] = useState("ALL");
     const [permissionUrl, setPermissionUrl] = useState("");
     const [permissions, setPermissions] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
