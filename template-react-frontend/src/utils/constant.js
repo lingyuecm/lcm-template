@@ -1,6 +1,8 @@
+export const colorBlueLight = "#9FD2FC";
 export const colorBlue = "#5982B6";
 export const colorBlueDark = "#4268A6"; // 80% brightness of colorBlue
 export const colorBlueDarker = "#364E6F"; // 60% brightness of colorBlue
+export const colorOrangeLight = "#FFE3A6";
 export const colorOrange = "#E7A158";
 export const colorOrangeDark = "#B88048"; // 80% brightness of colorOrange
 export const colorOrangeDarker = "#8A6036"; // 60% brightness of colorOrange

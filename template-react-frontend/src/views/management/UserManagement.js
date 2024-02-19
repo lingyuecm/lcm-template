@@ -20,7 +20,7 @@ import {
     colorGreyD2,
     colorOrange,
     colorOrangeDark,
-    colorOrangeDarker
+    colorOrangeDarker, colorOrangeLight
 } from "../../utils/constant";
 
 const DialogButtonWrapper = styled.div`
@@ -38,7 +38,7 @@ const UserTotalCount = styled.span`
 const UserRolesButton = styled.div`
     display: inline-block;
     padding: 0.3rem 1rem;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     background-color: ${() => colorOrange};
     box-shadow: 0 0 0.2rem #333333;
     &:hover {
@@ -111,7 +111,7 @@ const userTableTheme = createTheme({
                     fontSize: "1.5rem",
                     "&.Mui-selected": {
                         backgroundColor: colorBlue,
-                        color: colorOrange,
+                        color: colorOrangeLight,
                         fontWeight: 700
                     },
                     "&.Mui-selected:hover": {
@@ -161,6 +161,7 @@ export default function UserManagement() {
     const [pages, setPages] = useState(0);
     const [pageNo, setPageNo] = useState(1);
     const [allRoles, setAllRoles] = useState([]);
+    const [userRoles, setUserRoles] = useState([]);
     const [currentUserId, setCurrentUserId] = useState(0);
     const [allRolesVisible, setAllRolesVisible] = useState(false);
     const pageSize = 10;
@@ -187,12 +188,9 @@ export default function UserManagement() {
     function getAllRoles() {
         getAllRolesApi()
             .then(response => {
-                getUserRolesApi(currentUserId).then(response1 => {
-                    const userRoleIds = response1.resultBody.map(userRole => userRole.roleId);
-                    response.resultBody.forEach(role => {
-                        role.checked = userRoleIds.includes(role.roleId);
-                    });
-                    setAllRoles(response.resultBody);
+                setAllRoles(response["resultBody"]);
+                getUserRolesApi(currentUserId).then(response => {
+                    setUserRoles(response["resultBody"].map(r => r.roleId));
                 }).catch(() => {});
             }).catch(() => {});
     }
@@ -202,20 +200,21 @@ export default function UserManagement() {
         setAllRolesVisible(true);
     }
 
-    function onRoleToggled(index, checked) {
-        const roles = [];
-        allRoles.forEach(role => roles.push(role));
-        roles[index].checked = checked;
-
-        setAllRoles(roles);
+    function onRoleToggled(roleId, checked) {
+        if (checked) {
+            setUserRoles(userRoles.concat(roleId));
+        }
+        else {
+            let index = userRoles.indexOf(roleId);
+            setUserRoles(userRoles.slice(0, index).concat(userRoles.slice(index + 1)));
+        }
     }
 
     function grantRoles() {
-        console.log("AAA");
-        grantRolesApi(currentUserId, allRoles.filter(role => role.checked).map(role => role.roleId))
+        grantRolesApi(currentUserId, userRoles)
             .then(() => {
                 setAllRolesVisible(false);
-            });
+            }).catch(() => {});
     }
 
     useEffect(() => {
@@ -229,6 +228,7 @@ export default function UserManagement() {
         else {
             setCurrentUserId(0);
             setAllRoles([]);
+            setUserRoles([]);
         }
     }, [allRolesVisible]);
 
@@ -266,9 +266,11 @@ export default function UserManagement() {
                 <DialogContent>
                     <FormGroup>
                         {allRoles.map((role, index) => {
-                            return <FormControlLabel key={"Role-" + index}
-                                                     control={<Checkbox checked={role.checked}/>}
-                                                     label={role.roleName} onChange={e => onRoleToggled(index, e.target.checked)}/>
+                            return <FormControlLabel
+                                key={"Role-" + index}
+                                control={<Checkbox checked={userRoles.includes(role.roleId)}/>}
+                                label={role.roleName}
+                                onChange={e => onRoleToggled(role.roleId, e.target.checked)}/>
                         })}
                     </FormGroup>
                 </DialogContent>
