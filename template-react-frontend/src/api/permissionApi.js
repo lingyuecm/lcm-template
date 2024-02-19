@@ -21,3 +21,11 @@ export function grantPermissionsApi(roleId, permissionIds) {
         data: { permissionIds }
     })
 }
+
+export function getPermissionsApi(params) {
+    return service.request({
+        method: "GET",
+        url: "/permission/permissions",
+        params
+    })
+}

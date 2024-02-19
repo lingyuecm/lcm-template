@@ -10,6 +10,10 @@ export const colorGreyD2 = "#D2D2D2";//210
 export const colorGreyA6 = "#A6A6A6";//166
 export const colorGrey85 = "#858585";//133
 export const colorGrey64 = "#646464";//100
+export const colorGrey42 = "#424242";//66
+export const colorGrey21 = "#212121";//33
+export const colorGrey16 = "#161616";//22
+export const colorGrey0B = "#0B0B0B";//11
 
 export const colorSuccessLight = "#C2F5D2";
 export const colorSuccess = "#00C214";
