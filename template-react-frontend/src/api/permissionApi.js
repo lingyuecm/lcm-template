@@ -29,3 +29,10 @@ export function getPermissionsApi(params) {
         params
     })
 }
+
+export function refreshPermissionsApi() {
+    return service.request({
+        method: "POST",
+        url: "/permission/cache"
+    })
+}

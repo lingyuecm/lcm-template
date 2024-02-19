@@ -1,16 +1,25 @@
-import {ArrowForward} from "@mui/icons-material";
+import {ArrowForward, Key, Refresh} from "@mui/icons-material";
 import {Routes} from "react-router-dom";
 import {createRoute} from "../../rounter";
 import {getAccessToken, removeAccessToken} from "../../utils/cacheManager";
 import {useDispatch, useSelector} from "react-redux";
 import {setSidebarExpanded} from "../../store/sidebarSlice";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {logoutApi, metadataApi} from "../../api/userApi";
 import {setPersonName} from "../../store/personNameSlice";
 import SidebarItem from "./SidebarItem";
-import styled from "styled-components";
-import {colorBlueDark, colorOrange, colorOrangeDark, colorOrangeDarker} from "../../utils/constant";
+import styled, {keyframes} from "styled-components";
+import {
+    colorBlue,
+    colorBlueDark,
+    colorError,
+    colorOrange,
+    colorOrangeDark,
+    colorOrangeDarker, colorSuccess
+} from "../../utils/constant";
 import {createTheme, ThemeProvider} from "@mui/material";
+import {refreshPermissionsApi} from "../../api/permissionApi";
+import ToastUtils from "../../utils/ToastUtils";
 
 const RootWindow = styled.div`
     display: flex;
@@ -25,7 +34,9 @@ const Sidebar = styled.div`
         return props.expanded ? "30rem" : "5rem"
     }};
     height: 100%;
-    background-color: #5982B6;
+    background-color: ${() => {
+        return colorBlue;
+    }};
     box-shadow: 0.1rem 0 0.2rem #666666;
     transition-duration: 0.5s;
     z-index: 100;
@@ -34,6 +45,35 @@ const Sidebar = styled.div`
 const SidebarToggleButtonWrapper = styled.div`
     width: 100%;
     height: 5rem;
+`
+
+const refreshing = keyframes`
+    from {
+        transform: rotateZ(0deg);
+    }
+    to {
+        transform: rotateZ(360deg);
+    }
+`
+
+const RefreshPermissionsButton = styled.div`
+    float: left;
+    display: ${props => {
+        return props.expanded ? "block" : "none";
+    }};
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    color: ${props => {
+        return props.refreshing ? colorError : colorSuccess;
+    }};
+    .Refreshing {
+        animation: ${refreshing} 1s ease-in-out infinite;
+    }
+    &:hover {
+        cursor: pointer;
+        background-color: ${() => colorBlueDark};
+    }
 `
 
 const SidebarToggleButton = styled.div`
@@ -129,10 +169,58 @@ const sidebarToggleArrowTheme = createTheme({
     }
 });
 
+const keyTheme = createTheme({
+    components: {
+        MuiSvgIcon: {
+            styleOverrides: {
+                root: {
+                    position: "absolute",
+                    left: "1.5rem",
+                    top: "1.5rem",
+                    width: "2rem",
+                    height: "2rem",
+                    transform: "rotateZ(-90deg)"
+                }
+            }
+        }
+    }
+});
+
+const loopTheme = createTheme({
+    components: {
+        MuiSvgIcon: {
+            styleOverrides: {
+                root: {
+                    position: "absolute",
+                    left: "0",
+                    top: "0",
+                    width: "5rem",
+                    height: "5rem"
+                }
+            }
+        }
+    }
+});
+
 export default function WindowFrame(props) {
     const sidebarExpanded = useSelector(state => state.sidebar.sidebarExpanded);
     const accessToken = getAccessToken();
     const dispatch = useDispatch();
+    const [refreshing, setRefreshing] = useState(false);
+
+    function refreshPermissions() {
+        if (refreshing) {
+            return;
+        }
+        setRefreshing(true);
+        refreshPermissionsApi().then(() => {
+            setRefreshing(false);
+            ToastUtils.showSuccess("Permissions refreshed");
+        }).catch(() => {
+            setRefreshing(false);
+            ToastUtils.showError("Failed to refresh permissions");
+        });
+    }
 
     function onSidebarToggle() {
         dispatch(setSidebarExpanded(!sidebarExpanded));
@@ -164,6 +252,17 @@ export default function WindowFrame(props) {
     return <RootWindow>
         <Sidebar expanded={sidebarExpanded}>
             <SidebarToggleButtonWrapper>
+                <RefreshPermissionsButton
+                    expanded={sidebarExpanded}
+                    refreshing={refreshing}
+                    onClick={() => refreshPermissions()}>
+                    <ThemeProvider theme={keyTheme}>
+                        <Key/>
+                    </ThemeProvider>
+                    <ThemeProvider theme={loopTheme}>
+                        <Refresh className={refreshing ? "Refreshing" : ""}/>
+                    </ThemeProvider>
+                </RefreshPermissionsButton>
                 <SidebarToggleButton flipped={sidebarExpanded} onClick={onSidebarToggle}>
                     <ThemeProvider theme={sidebarToggleArrowTheme}>
                         <ArrowForward/>
