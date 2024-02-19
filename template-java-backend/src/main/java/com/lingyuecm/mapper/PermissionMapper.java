@@ -1,6 +1,7 @@
 package com.lingyuecm.mapper;
 
 import com.lingyuecm.dto.ConfPermissionDto;
+import com.lingyuecm.model.ConfPermission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,4 +40,18 @@ public interface PermissionMapper {
      */
     void insertRolePermissions(@Param("roleId") Integer roleId,
                                @Param("permissionIds") List<Integer> permissionIds);
+
+    /**
+     * Selects the permission list for the admin
+     * @param permission Conditions for searching,
+     * see {@link ConfPermission#getHttpMethod()}, {@link ConfPermission#getPermissionUrl()}
+     */
+    List<ConfPermissionDto> managePermissions(ConfPermission permission);
+
+    /**
+     * Selects the total count of permissions
+     * @param permission Conditions for searching,
+     * see {@link ConfPermission#getHttpMethod()}, {@link ConfPermission#getPermissionUrl()}
+     */
+    long selectPermissionCount(ConfPermission permission);
 }

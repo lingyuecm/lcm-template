@@ -1,7 +1,9 @@
 package com.lingyuecm.service.impl;
 
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfPermissionDto;
 import com.lingyuecm.mapper.PermissionMapper;
+import com.lingyuecm.model.ConfPermission;
 import com.lingyuecm.service.PermissionService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -47,5 +49,14 @@ public class PermissionServiceImpl implements PermissionService {
         if (!permissionIds.isEmpty()) {
             this.permissionMapper.insertRolePermissions(roleId, permissionIds);
         }
+    }
+
+    @Override
+    public PagedList<ConfPermissionDto> getPermissions(ConfPermission permission) {
+        List<ConfPermissionDto> result = this.permissionMapper.managePermissions(permission);
+        if (null == result) {
+            result = new ArrayList<>();
+        }
+        return PagedList.paginated(this.permissionMapper.selectPermissionCount(permission), result);
     }
 }

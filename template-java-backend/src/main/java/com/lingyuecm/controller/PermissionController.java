@@ -1,7 +1,11 @@
 package com.lingyuecm.controller;
 
 import com.lingyuecm.common.LcmWebResult;
+import com.lingyuecm.common.PageData;
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfPermissionDto;
+import com.lingyuecm.model.ConfPermission;
+import com.lingyuecm.request.GetPermissionsRequest;
 import com.lingyuecm.request.GrantPermissionsRequest;
 import com.lingyuecm.service.PermissionService;
 import jakarta.annotation.Resource;
@@ -47,5 +51,17 @@ public class PermissionController {
                                                  @RequestBody @Validated GrantPermissionsRequest request) {
         this.permissionService.grantPermissionsToRole(roleId, request.getPermissionIds());
         return LcmWebResult.success(0);
+    }
+    /**
+     * Gets the permission list for the admin
+     */
+    @GetMapping("/permissions")
+    public LcmWebResult<PagedList<ConfPermissionDto>> permissions(GetPermissionsRequest request, @SuppressWarnings("unused") PageData pageData) {
+        ConfPermission permission = new ConfPermission();
+        permission.setHttpMethod(request.getHttpMethod());
+        permission.setPermissionUrl(request.getPermissionUrl());
+
+        PagedList<ConfPermissionDto> result = this.permissionService.getPermissions(permission);
+        return LcmWebResult.success(result);
     }
 }

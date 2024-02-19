@@ -57,4 +57,31 @@
             (#{roleId}, #{permissionId})
         </foreach>;
     </insert>
+    <sql id="permissionConditions">
+        WHERE (1 = 1)
+        <if test="null != httpMethod">
+            AND HTTP_METHOD = #{httpMethod}
+        </if>
+        <if test="null != permissionUrl">
+            AND PERMISSION_URL LIKE CONCAT(#{permissionUrl}, '%')
+        </if>
+    </sql>
+    <select id="managePermissions"
+            parameterType="com.lingyuecm.model.ConfPermission"
+            resultType="com.lingyuecm.dto.ConfPermissionDto">
+        <bind name="pageSize" value="@com.lingyuecm.utils.ContextUtils@getPageSize()"/>
+        <bind name="offset" value="@com.lingyuecm.utils.ContextUtils@getOffset()"/>
+        SELECT PERMISSION_ID AS permissionId,
+               HTTP_METHOD AS httpMethod,
+               PERMISSION_URL AS permissionUrl
+        FROM CONF_PERMISSION
+        <include refid="permissionConditions"/>
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    <select id="selectPermissionCount"
+            parameterType="com.lingyuecm.model.ConfPermission">
+        SELECT COUNT(PERMISSION_ID)
+        FROM CONF_PERMISSION
+        <include refid="permissionConditions"/>;
+    </select>
 </mapper>

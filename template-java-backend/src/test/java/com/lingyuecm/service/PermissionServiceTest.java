@@ -1,7 +1,9 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfPermissionDto;
 import com.lingyuecm.mapper.PermissionMapper;
+import com.lingyuecm.model.ConfPermission;
 import com.lingyuecm.service.impl.PermissionServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -82,6 +84,30 @@ public class PermissionServiceTest {
         assertDoesNotThrow(() -> this.permissionService.grantPermissionsToRole(1, new ArrayList<>()));
         assertDoesNotThrow(() -> this.permissionService.grantPermissionsToRole(1,
                 new ArrayList<>(){{add(MOCK_PERMISSION_ID);}}));
+    }
+
+    @Test
+    public void getPermissions() {
+        ConfPermissionDto permissionDto = this.generateMockPermission();
+        when(this.permissionMapper.managePermissions(any())).thenReturn(null)
+                .thenReturn(new ArrayList<>(){{add(permissionDto);}});
+        long totalCount = 100L;
+        when(this.permissionMapper.selectPermissionCount(any())).thenReturn(totalCount);
+
+        // NULL
+        PagedList<ConfPermissionDto> result = this.permissionService.getPermissions(new ConfPermission());
+        assertEquals(totalCount, result.getTotalCount());
+        assertNotNull(result.getDataList());
+        assertEquals(0, result.getDataList().size());
+
+        // List with one item
+        result = this.permissionService.getPermissions(new ConfPermission());
+        assertEquals(totalCount, result.getTotalCount());
+        assertNotNull(result.getDataList());
+        assertEquals(1, result.getDataList().size());
+        assertEquals(MOCK_PERMISSION_ID, result.getDataList().get(0).getPermissionId());
+        assertEquals(MOCK_HTTP_METHOD, result.getDataList().get(0).getHttpMethod());
+        assertEquals(MOCK_PERMISSION_URL, result.getDataList().get(0).getPermissionUrl());
     }
 
     private ConfPermissionDto generateMockPermission() {

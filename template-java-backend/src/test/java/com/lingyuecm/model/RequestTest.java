@@ -1,5 +1,6 @@
 package com.lingyuecm.model;
 
+import com.lingyuecm.request.GetPermissionsRequest;
 import com.lingyuecm.request.GetRolesRequest;
 import com.lingyuecm.request.GetUsersRequest;
 import com.lingyuecm.request.GrantPermissionsRequest;
@@ -74,5 +75,16 @@ public class RequestTest {
         assertDoesNotThrow(() -> r.setPermissionIds(new ArrayList<>()));
 
         assertNotNull(r.getPermissionIds());
+    }
+
+    @Test
+    public void testGetPermissionsRequest() {
+        GetPermissionsRequest r = new GetPermissionsRequest();
+
+        assertDoesNotThrow(() -> r.setHttpMethod(""));
+        assertDoesNotThrow(() -> r.setPermissionUrl(""));
+
+        assertNotNull(r.getHttpMethod());
+        assertNotNull(r.getPermissionUrl());
     }
 }

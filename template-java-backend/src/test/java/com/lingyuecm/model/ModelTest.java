@@ -96,4 +96,27 @@ public class ModelTest {
         assertNotNull(r.getUpdatedBy());
         assertNotNull(r.getTimeUpdated());
     }
+
+    @Test
+    public void testConfPermission() {
+        ConfPermission p = new ConfPermission();
+
+        assertDoesNotThrow(() -> p.setPermissionId(1));
+        assertDoesNotThrow(() -> p.setHttpMethod(""));
+        assertDoesNotThrow(() -> p.setPermissionUrl(""));
+        assertDoesNotThrow(() -> p.setStatus(1));
+        assertDoesNotThrow(() -> p.setCreatedBy(1L));
+        assertDoesNotThrow(() -> p.setTimeCreated(new Date()));
+        assertDoesNotThrow(() -> p.setUpdatedBy(1L));
+        assertDoesNotThrow(() -> p.setTimeUpdated(new Date()));
+
+        assertNotNull(p.getPermissionId());
+        assertNotNull(p.getHttpMethod());
+        assertNotNull(p.getPermissionUrl());
+        assertNotNull(p.getStatus());
+        assertNotNull(p.getCreatedBy());
+        assertNotNull(p.getTimeCreated());
+        assertNotNull(p.getUpdatedBy());
+        assertNotNull(p.getTimeUpdated());
+    }
 }

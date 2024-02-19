@@ -2,6 +2,7 @@ package com.lingyuecm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingyuecm.common.LcmWebStatus;
+import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfPermissionDto;
 import com.lingyuecm.exception.LcmExceptionHandler;
 import com.lingyuecm.request.GrantPermissionsRequest;
@@ -61,7 +62,8 @@ public class PermissionControllerTest {
                 .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
                 .andExpect(jsonPath("$.resultBody[0].permissionId").value(MOCK_PERMISSION_ID))
                 .andExpect(jsonPath("$.resultBody[0].httpMethod").value(MOCK_HTTP_METHOD))
-                .andExpect(jsonPath("$.resultBody[0].permissionUrl").value(MOCK_PERMISSION_URL));
+                .andExpect(jsonPath("$.resultBody[0].permissionUrl").value(MOCK_PERMISSION_URL))
+                .andReturn();
     }
 
     @Test
@@ -75,7 +77,8 @@ public class PermissionControllerTest {
                 .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
                 .andExpect(jsonPath("$.resultBody[0].permissionId").value(MOCK_PERMISSION_ID))
                 .andExpect(jsonPath("$.resultBody[0].httpMethod").value(MOCK_HTTP_METHOD))
-                .andExpect(jsonPath("$.resultBody[0].permissionUrl").value(MOCK_PERMISSION_URL));
+                .andExpect(jsonPath("$.resultBody[0].permissionUrl").value(MOCK_PERMISSION_URL))
+                .andReturn();
     }
 
     @Test
@@ -90,6 +93,23 @@ public class PermissionControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
+                .andReturn();
+    }
+
+    @Test
+    public void getPermissions() throws Exception {
+        ConfPermissionDto permissionDto = this.generateMockPermission();
+        long totalCount = 100L;
+        when(this.permissionService.getPermissions(any()))
+                .thenReturn(PagedList.paginated(totalCount, new ArrayList<>(){{add(permissionDto);}}));
+        this.mockMvc.perform(get("/permission/permissions?httpMethod=GET&permissionUrl=%2Fpermission%2Furl&pageNo=1&pageSize=10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
+                .andExpect(jsonPath("$.resultBody.totalCount").value(totalCount))
+                .andExpect(jsonPath("$.resultBody.dataList[0].permissionId").value(MOCK_PERMISSION_ID))
+                .andExpect(jsonPath("$.resultBody.dataList[0].httpMethod").value(MOCK_HTTP_METHOD))
+                .andExpect(jsonPath("$.resultBody.dataList[0].permissionUrl").value(MOCK_PERMISSION_URL))
                 .andReturn();
     }
 
