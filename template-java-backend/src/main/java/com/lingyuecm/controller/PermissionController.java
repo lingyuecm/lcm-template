@@ -64,4 +64,13 @@ public class PermissionController {
         PagedList<ConfPermissionDto> result = this.permissionService.getPermissions(permission);
         return LcmWebResult.success(result);
     }
+
+    /**
+     * Refreshes the cached user permissions
+     */
+    @PostMapping("/cache")
+    public LcmWebResult<Integer> refreshPermissions() {
+        this.permissionService.refreshPermissionCache();
+        return LcmWebResult.success(0);
+    }
 }

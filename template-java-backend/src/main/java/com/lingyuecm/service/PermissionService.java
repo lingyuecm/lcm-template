@@ -34,4 +34,9 @@ public interface PermissionService {
      * @see ConfPermissionDto
      */
     PagedList<ConfPermissionDto> getPermissions(ConfPermission permission);
+
+    /**
+     * Refreshes the cached user permissions
+     */
+    void refreshPermissionCache();
 }

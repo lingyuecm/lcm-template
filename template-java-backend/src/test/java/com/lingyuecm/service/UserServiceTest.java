@@ -4,9 +4,7 @@ import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
-import com.lingyuecm.dto.ConfPermissionDto;
 import com.lingyuecm.dto.LoginDto;
-import com.lingyuecm.mapper.PermissionMapper;
 import com.lingyuecm.mapper.UserMapper;
 import com.lingyuecm.model.BizUser;
 import com.lingyuecm.service.impl.UserServiceImpl;
@@ -15,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,13 +46,11 @@ public class UserServiceTest {
     @Mock
     private JwtService jwtService;
     @Mock
+    private CacheService cacheService;
+    @Mock
     private UserMapper userMapper;
     @Mock
-    private PermissionMapper permissionMapper;
-    @Mock
     private StringRedisTemplate redisTemplate;
-    @Mock
-    private SetOperations<String, String> opsForSet;
     @Mock
     private ValueOperations<String, String> valueOps;
     @Mock
@@ -106,14 +101,7 @@ public class UserServiceTest {
         // Passwords don't match
         assertNull(this.userService.userLogin(bizUser, MOCK_LOGIN_TOKEN, MOCK_CAPTCHA_1));
 
-        ConfPermissionDto permissionDto = new ConfPermissionDto();
-        permissionDto.setHttpMethod("GET");
-        permissionDto.setPermissionUrl("/permission/url");
-        when(this.permissionMapper.selectUserPermissions(anyLong())).thenReturn(null)
-                .thenReturn(new ArrayList<>(){{add(permissionDto);}});
-        when(this.redisTemplate.delete(anyString())).thenReturn(true);
-        when(this.redisTemplate.opsForSet()).thenReturn(this.opsForSet);
-        when(this.opsForSet.add(anyString(), any())).thenReturn(1L);
+        doNothing().when(this.cacheService).cacheUserPermissions(anyLong());
         // Success, no permissions
         LoginDto successDto = this.userService.userLogin(bizUser, MOCK_LOGIN_TOKEN, MOCK_CAPTCHA_1);
         assertNotNull(successDto);

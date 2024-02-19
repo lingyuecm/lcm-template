@@ -1,5 +1,6 @@
 package com.lingyuecm.service;
 
+import com.lingyuecm.common.Constant;
 import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.ConfPermissionDto;
 import com.lingyuecm.mapper.PermissionMapper;
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -18,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -31,6 +36,10 @@ public class PermissionServiceTest {
 
     @Mock
     private PermissionMapper permissionMapper;
+    @Mock
+    private StringRedisTemplate redisTemplate;
+    @Mock
+    private CacheService cacheService;
 
     public PermissionServiceTest() {
         assertNotNull(MockitoAnnotations.openMocks(this));
@@ -108,6 +117,18 @@ public class PermissionServiceTest {
         assertEquals(MOCK_PERMISSION_ID, result.getDataList().get(0).getPermissionId());
         assertEquals(MOCK_HTTP_METHOD, result.getDataList().get(0).getHttpMethod());
         assertEquals(MOCK_PERMISSION_URL, result.getDataList().get(0).getPermissionUrl());
+    }
+
+    @Test
+    public void refreshPermissionCache() {
+        when(this.redisTemplate.keys(anyString())).thenReturn(null)
+                .thenReturn(new HashSet<>(){{add(Constant.REDIS_PREFIX_USER_PERMISSION + 1);}});
+        doNothing().when(this.cacheService).cacheUserPermissions(anyLong());
+
+        // NULL
+        assertDoesNotThrow(() -> this.permissionService.refreshPermissionCache());
+        // Cache refreshed
+        assertDoesNotThrow(() -> this.permissionService.refreshPermissionCache());
     }
 
     private ConfPermissionDto generateMockPermission() {

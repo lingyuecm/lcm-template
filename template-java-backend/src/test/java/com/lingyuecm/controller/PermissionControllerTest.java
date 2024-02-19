@@ -113,6 +113,16 @@ public class PermissionControllerTest {
                 .andReturn();
     }
 
+    @Test
+    public void refreshPermissions() throws Exception {
+        doNothing().when(this.permissionService).refreshPermissionCache();
+        this.mockMvc.perform(post("/permission/cache"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultCode").value(LcmWebStatus.OK.getStatusCode()))
+                .andReturn();
+    }
+
     private ConfPermissionDto generateMockPermission() {
         ConfPermissionDto result = new ConfPermissionDto();
 
