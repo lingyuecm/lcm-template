@@ -293,7 +293,7 @@ export default function PermissionManagement() {
                     <TableRow>
                         <TableCell style={{borderTopLeftRadius: "1rem", borderRight: "1px solid #B2B2B2"}}
                                    align={"center"}>HTTP Method</TableCell>
-                        <TableCell style={{borderRight: "1px solid #B2B2B2"}}
+                        <TableCell style={{borderTopRightRadius: "1rem"}}
                                    align={"center"}>URL</TableCell>
                     </TableRow>
                 </TableHead>

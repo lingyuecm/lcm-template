@@ -9,6 +9,16 @@ const RootContainer = styled.div`
     margin-top: 30rem;
 `
 
+const Welcome = styled.div`
+    margin-bottom: 3rem;
+    color: ${() => {
+        return colorBlue;
+    }};
+    font-size: 5rem;
+    font-weight: bolder;
+    text-align: center;
+`
+
 const InputFrame = styled.input`
     width: 100%;
     height: 100%;
@@ -116,6 +126,7 @@ export default function Login() {
     }, []);
 
     return <RootContainer>
+        <Welcome>Welcome to the Simple RBAC System</Welcome>
         <ThemeProvider theme={loginTheme}>
             <Grid container spacing={0}>
                 <Grid item xs={4}></Grid>
