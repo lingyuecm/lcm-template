@@ -25,10 +25,6 @@ export const menuSlice = createSlice({
                         title: 'Permission Management'
                     }
                 ]
-            },
-            {
-                path: '/aaa',
-                title: 'AAA'
             }
         ],
         expandedKeys: [],
