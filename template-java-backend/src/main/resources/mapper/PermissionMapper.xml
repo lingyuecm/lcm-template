@@ -53,7 +53,7 @@
          PERMISSION_ID
         )
         VALUES
-        <foreach collection="permissionIds" item="permissionId" open="" separator="" close="">
+        <foreach collection="permissionIds" item="permissionId" open="" separator="," close="">
             (#{roleId}, #{permissionId})
         </foreach>;
     </insert>
