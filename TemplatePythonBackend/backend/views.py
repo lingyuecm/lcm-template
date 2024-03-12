@@ -11,7 +11,7 @@ from django.core.cache import cache
 from django.http import HttpRequest, HttpResponse
 from rest_framework.decorators import api_view
 
-from backend.models import LcmWebResult, CaptchaDto, LoginDto
+from backend.models import LcmWebResult, CaptchaDto, LoginDto, wrap_result_to_json
 from backend.utils import cursor
 from backend.utils.jwt_utils import generate_login_token, parse_login_token, generate_access_token
 
@@ -39,7 +39,7 @@ def captcha(request: HttpRequest) -> HttpResponse:
 
     cache.set(login_captcha_id, captcha_text, timeout=300000)
 
-    return HttpResponse(json.dumps(LcmWebResult(result_body=result).__dict__, default=lambda o: o.__dict__))
+    return HttpResponse(wrap_result_to_json(result))
 
 
 @api_view(["POST"])
@@ -47,28 +47,25 @@ def login(request: HttpRequest) -> HttpResponse:
     body_dict = json.loads(request.body)
     login_captcha_id = parse_login_token(body_dict['token'])
     if not (login_captcha_id in cache):
-        return HttpResponse(json.dumps(LcmWebResult(None, result_code=-4, result_message='Failed to login').__dict__,
-                                       default=lambda o: o.__dict__))
+        return HttpResponse(wrap_result_to_json(None, -4, 'Failed to login'))
 
     captcha_text = cache.get(login_captcha_id)
     if not (body_dict['captcha'] == captcha_text):
-        return HttpResponse(json.dumps(LcmWebResult(None, result_code=-4, result_message='Failed to login').__dict__,
-                                       default=lambda o: o.__dict__))
+        return HttpResponse(wrap_result_to_json(None, -4, 'Failed to login'))
 
     cursor.execute('SELECT USER_ID, LOGIN_PWD FROM BIZ_USER WHERE PHONE_NO = %s',
                    body_dict['phoneNo'])
     user_dto = cursor.fetchone()
     if not bcrypt.checkpw(bytes(body_dict['password'], encoding='utf8'),
                           bytes(user_dto['LOGIN_PWD'], encoding='utf8')):
-        return HttpResponse(json.dumps(LcmWebResult(None, result_code=-4, result_message='Failed to login').__dict__,
-                                       default=lambda o: o.__dict__))
+        return HttpResponse(wrap_result_to_json(None, -4, 'Failed to login'))
 
     login_dto = LoginDto()
 
     access_token_dto = generate_access_token(user_dto['USER_ID'])
     login_dto.token = access_token_dto.token
 
-    return HttpResponse(json.dumps(LcmWebResult(login_dto).__dict__, default=lambda o: o.__dict__))
+    return HttpResponse(wrap_result_to_json(login_dto))
 
 
 @api_view(['GET'])
@@ -76,6 +73,6 @@ def metadata(request: HttpRequest) -> HttpResponse:
     cursor.execute('SELECT FIRST_NAME AS firstName, LAST_NAME AS lastName FROM BIZ_USER WHERE USER_ID = %s',
                    request.query_params['userId'])
     person_name = cursor.fetchone()
-    return HttpResponse(json.dumps(LcmWebResult({
+    return HttpResponse(wrap_result_to_json({
         'firstName': person_name['firstName'],
-        'lastName': person_name['lastName']}).__dict__, default=lambda o: o.__dict__))
+        'lastName': person_name['lastName']}))

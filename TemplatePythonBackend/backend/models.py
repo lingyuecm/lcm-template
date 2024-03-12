@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 
 
@@ -29,3 +31,7 @@ class LoginDto:
 
 class TokenVerificationDto:
     userId: int
+
+
+def wrap_result_to_json(result_body: any, result_code: int = 0, result_message: str = 'OK') -> str:
+    return json.dumps(LcmWebResult(result_body, result_code, result_message).__dict__, default=lambda o: o.__dict__)
