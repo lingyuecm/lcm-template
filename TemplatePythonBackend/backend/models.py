@@ -17,9 +17,15 @@ class CaptchaDto:
     token: str
     captchaImage: str
 
+
 class AccessTokenDto:
     token: str
     jwtId: str
 
+
 class LoginDto:
     token: str
+
+
+class TokenVerificationDto:
+    userId: int

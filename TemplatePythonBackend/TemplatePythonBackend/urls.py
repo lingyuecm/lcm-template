@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from backend.views import captcha, login
+from backend.views import captcha, login, metadata
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/captcha', captcha),
-    path('user/login', login)
+    path('user/login', login),
+    path('user/metadata', metadata)
 ]

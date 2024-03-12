@@ -1,20 +1,18 @@
 import base64
 import io
 import json
-import os
 import random
 import uuid
 
 import bcrypt
-import pymysql
 from PIL import Image, ImageDraw
 from django.core.cache import cache
 
 from django.http import HttpRequest, HttpResponse
-from pymysql.cursors import DictCursor
 from rest_framework.decorators import api_view
 
 from backend.models import LcmWebResult, CaptchaDto, LoginDto
+from backend.utils import cursor
 from backend.utils.jwt_utils import generate_login_token, parse_login_token, generate_access_token
 
 
@@ -57,10 +55,6 @@ def login(request: HttpRequest) -> HttpResponse:
         return HttpResponse(json.dumps(LcmWebResult(None, result_code=-4, result_message='Failed to login').__dict__,
                                        default=lambda o: o.__dict__))
 
-    conn = pymysql.connect(host=os.environ.get('DB_HOST'), port=int(os.environ.get('DB_PORT')),
-                           user=os.environ.get('DB_USERNAME'), password=os.environ.get('DB_PASSWORD'),
-                           database=os.environ.get('DB_NAME'))
-    cursor = conn.cursor(cursor=DictCursor)
     cursor.execute('SELECT USER_ID, LOGIN_PWD FROM BIZ_USER WHERE PHONE_NO = %s',
                    body_dict['phoneNo'])
     user_dto = cursor.fetchone()
@@ -74,5 +68,14 @@ def login(request: HttpRequest) -> HttpResponse:
     access_token_dto = generate_access_token(user_dto['USER_ID'])
     login_dto.token = access_token_dto.token
 
-    conn.close()
     return HttpResponse(json.dumps(LcmWebResult(login_dto).__dict__, default=lambda o: o.__dict__))
+
+
+@api_view(['GET'])
+def metadata(request: HttpRequest) -> HttpResponse:
+    cursor.execute('SELECT FIRST_NAME AS firstName, LAST_NAME AS lastName FROM BIZ_USER WHERE USER_ID = %s',
+                   request.query_params['userId'])
+    person_name = cursor.fetchone()
+    return HttpResponse(json.dumps(LcmWebResult({
+        'firstName': person_name['firstName'],
+        'lastName': person_name['lastName']}).__dict__, default=lambda o: o.__dict__))
