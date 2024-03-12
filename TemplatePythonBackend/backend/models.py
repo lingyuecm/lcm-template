@@ -1,9 +1,6 @@
 import json
-
-from django.db import models
-
-
 # Create your models here.
+
 
 class LcmWebResult:
     resultCode: int

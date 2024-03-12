@@ -11,7 +11,7 @@ from django.core.cache import cache
 from django.http import HttpRequest, HttpResponse
 from rest_framework.decorators import api_view
 
-from backend.models import LcmWebResult, CaptchaDto, LoginDto, wrap_result_to_json
+from backend.models import CaptchaDto, LoginDto, wrap_result_to_json
 from backend.utils import cursor
 from backend.utils.jwt_utils import generate_login_token, parse_login_token, generate_access_token
 
