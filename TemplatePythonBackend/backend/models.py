@@ -7,12 +7,19 @@ class LcmWebResult:
     resultCode: int
     resultMessage: str
 
-    def __init__(self, result_body):
-        self.resultCode = 0
-        self.resultMessage = "OK"
+    def __init__(self, result_body: any, result_code: int = 0, result_message: str = 'OK'):
+        self.resultCode = result_code
+        self.resultMessage = result_message
         self.resultBody = result_body
 
 
 class CaptchaDto:
     token: str
     captchaImage: str
+
+class AccessTokenDto:
+    token: str
+    jwtId: str
+
+class LoginDto:
+    token: str
