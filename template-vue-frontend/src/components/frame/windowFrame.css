@@ -1,0 +1,37 @@
+@layer sidebar {
+    .sidebar-expanded {
+        @apply inline-block;
+        @apply h-full;
+        @apply bg-red-200;
+
+        width: 30rem;
+        transition-duration: 0.5s;
+    }
+    .sidebar-narrow {
+        @apply inline-block;
+        @apply h-full;
+        @apply bg-red-200;
+
+        width: 5rem;
+        transition-duration: 0.5s;
+    }
+}
+
+@layer content {
+    .content-normal {
+        @apply inline-block;
+        @apply h-full;
+        @apply bg-green-200;
+
+        width: calc(100% - 30rem);
+        transition-duration: 0.5s;
+    }
+    .content-wide {
+        @apply inline-block;
+        @apply h-full;
+        @apply bg-green-200;
+
+        width: calc(100% - 5rem);
+        transition-duration: 0.5s;
+    }
+}
