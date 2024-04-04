@@ -1,37 +1,45 @@
-@layer sidebar {
-    .sidebar-expanded {
-        @apply inline-block;
-        @apply h-full;
-        @apply bg-red-200;
+.sidebar-expanded {
+    @apply inline-block;
+    @apply h-full;
+    @apply bg-blue-200;
+    @apply overflow-x-hidden;
 
-        width: 30rem;
-        transition-duration: 0.5s;
-    }
-    .sidebar-narrow {
-        @apply inline-block;
-        @apply h-full;
-        @apply bg-red-200;
-
-        width: 5rem;
-        transition-duration: 0.5s;
-    }
+    width: 30rem;
+    transition-duration: 0.5s;
 }
+.sidebar-normal {
+    @apply inline-block;
+    @apply h-full;
+    @apply bg-blue-200;
+    @apply overflow-x-hidden;
 
-@layer content {
-    .content-normal {
-        @apply inline-block;
-        @apply h-full;
-        @apply bg-green-200;
+    width: 5rem;
+    transition-duration: 0.5s;
+}
+.content-normal {
+    @apply inline-block;
+    @apply h-full;
+    @apply bg-green-200;
 
-        width: calc(100% - 30rem);
-        transition-duration: 0.5s;
-    }
-    .content-wide {
-        @apply inline-block;
-        @apply h-full;
-        @apply bg-green-200;
+    width: calc(100% - 30rem);
+    transition-duration: 0.5s;
+}
+.content-wide {
+    @apply inline-block;
+    @apply h-full;
+    @apply bg-green-200;
 
-        width: calc(100% - 5rem);
-        transition-duration: 0.5s;
-    }
+    width: calc(100% - 5rem);
+    transition-duration: 0.5s;
+}
+.sidebar-control {
+    height: 5rem;
+}
+.sidebar-toggle-arrow {
+    font-size: 1.8rem;
+    transition-duration: 0.5s;
+}
+.sidebar-toggle-arrow-flipped {
+    transform: rotateY(180deg);
+    transition-duration: 0.5s;
 }

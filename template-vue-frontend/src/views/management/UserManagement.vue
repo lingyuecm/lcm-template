@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="bg-green-500 h-full">Dashboard</div>
+  <div>User</div>
 </template>
 
 <style scoped>

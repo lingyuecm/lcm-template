@@ -16,7 +16,25 @@ const router = createRouter({
         {
           path: 'dashboard',
           name: 'Dashboard',
-          component: () => import('../views/dashboard/Dashboard.vue')
+          component: () => import('../views/dashboard/HomeDashboard.vue')
+        }
+      ]
+    },
+    {
+      path: '/backendMgmt',
+      component: WindowFrame,
+      children: [
+        {
+          path: 'userMgmt',
+          component: () => import('../views/management/UserManagement.vue')
+        },
+        {
+          path: 'roleMgmt',
+          component: () => import('../views/management/RoleManagement.vue')
+        },
+        {
+          path: 'permissionMgmt',
+          component: () => import('../views/management/PermissionManagement.vue')
         }
       ]
     }
