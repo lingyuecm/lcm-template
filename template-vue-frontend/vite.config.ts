@@ -13,7 +13,14 @@ export default defineConfig({
     VueDevTools(),
   ],
   server: {
-    port: 8090
+    port: 8090,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8180',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   },
   resolve: {
     alias: {

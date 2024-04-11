@@ -1,0 +1,9 @@
+.el-form-item {
+    @apply h-[5rem];
+    @apply mt-[1rem];
+    @apply mb-0;
+}
+.el-input {
+    @apply h-full;
+    --el-input-border-radius: 1rem;
+}

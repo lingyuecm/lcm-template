@@ -3,12 +3,23 @@ import { useSidebarStore } from '@/stores/sidebar'
 import { storeToRefs } from 'pinia'
 import { useMenuStore } from '@/stores/menu'
 import SidebarItem from '@/components/frame/SidebarItem.vue'
-import { ArrowLeft, ArrowLeftBold, DArrowLeft } from '@element-plus/icons-vue'
+import { ArrowLeft } from '@element-plus/icons-vue'
+import { usePersonStore } from '@/stores/person'
 
 const sidebarStore = useSidebarStore()
 const { sidebarExpanded } = storeToRefs(sidebarStore)
+
+const personStore = usePersonStore()
+
 const toggleSidebar = () => {
   sidebarStore.toggleSidebar()
+}
+
+const getFullName = () => {
+  const personName = personStore.personName
+
+  return (personName.firstName ? personName.firstName : '') +
+    (personName.lastName ? (' ' + personName.lastName) : '')
 }
 
 const menuStore = useMenuStore()
@@ -19,7 +30,7 @@ const menuStore = useMenuStore()
       <div class="h-[5rem]">
         <div :style="{display: sidebarExpanded ? 'inline-block' : 'none'}" class="w-[5rem] h-full hover:bg-blue-300">AAA</div>
         <div class="flex float-right w-[5rem] h-full items-center hover:bg-blue-300" @click="toggleSidebar">
-          <div class="w-full text-center">
+          <div class="w-full text-center hover:cursor-pointer">
             <el-icon :class="sidebarExpanded ? 'sidebar-toggle-arrow' : 'sidebar-toggle-arrow sidebar-toggle-arrow-flipped'">
               <ArrowLeft/>
             </el-icon>
@@ -33,8 +44,11 @@ const menuStore = useMenuStore()
         :indent="0"/>
     </div>
     <div :class="sidebarExpanded ? 'content-normal' : 'content-wide'">
-      <div class="w-full h-[5rem] bg-orange-200">Top</div>
-      <div class="w-full h-[calc(100%-5rem)] bg-yellow-200">
+      <div class="flex w-full h-[5rem] bg-orange-200">
+        <div class="flex w-fit h-full text-[1.5rem] items-center">Hello, <span class="text-[1.8rem] font-bold">{{ getFullName() }}</span></div>
+        <div class="absolute flex right-[1rem] h-[5rem] float-right items-center text-[1.5rem] pl-[1rem] pr-[1rem] hover:bg-orange-300 hover:cursor-pointer">Logout</div>
+      </div>
+      <div class="w-full h-[calc(100%-5rem)] p-[0.2rem]">
         <router-view/>
       </div>
     </div>

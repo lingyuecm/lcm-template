@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 
-const aaa = ref('Dashboard')
 </script>
 
 <template>
-  <div class="bg-green-500 h-full">{{ aaa }}</div>
+  <div class="h-full">Dashboard</div>
 </template>
 
 <style scoped>
