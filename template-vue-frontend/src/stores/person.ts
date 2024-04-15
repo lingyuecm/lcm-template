@@ -7,8 +7,8 @@ type PersonName = {
 }
 export const usePersonStore = defineStore('person', () => {
   const personName = ref<PersonName>({
-    firstName: 'LeBron',
-    lastName: 'James'
+    firstName: '',
+    lastName: ''
   })
 
   function setPersonName(personName1: PersonName) {

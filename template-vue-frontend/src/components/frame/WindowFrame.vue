@@ -5,6 +5,9 @@ import { useMenuStore } from '@/stores/menu'
 import SidebarItem from '@/components/frame/SidebarItem.vue'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { usePersonStore } from '@/stores/person'
+import { onBeforeMount } from 'vue'
+import { logoutApi, metadataApi } from '@/api/userApi'
+import { removeAccessToken } from '@/utils/cacheManager'
 
 const sidebarStore = useSidebarStore()
 const { sidebarExpanded } = storeToRefs(sidebarStore)
@@ -22,13 +25,33 @@ const getFullName = () => {
     (personName.lastName ? (' ' + personName.lastName) : '')
 }
 
+const logout = () => {
+  logoutApi()
+    .then(() => {
+      removeAccessToken()
+      window.location.reload()
+    })
+}
+
+onBeforeMount(() => {
+  if (!personStore.personName.firstName && !personStore.personName.lastName) {
+    metadataApi()
+      .then(response => {
+      personStore.setPersonName({
+        firstName: response.resultBody.firstName,
+        lastName: response.resultBody.lastName
+      })
+    }).catch(() => {})
+  }
+})
+
 const menuStore = useMenuStore()
 </script>
 <template>
   <div class="flex h-full">
     <div :class="sidebarExpanded ? 'sidebar-expanded' : 'sidebar-normal'">
       <div class="h-[5rem]">
-        <div :style="{display: sidebarExpanded ? 'inline-block' : 'none'}" class="w-[5rem] h-full hover:bg-blue-300">AAA</div>
+        <div :style="{display: sidebarExpanded ? 'inline-block' : 'none'}" class="w-[5rem] h-full hover:cursor-pointer hover:bg-blue-300">AAA</div>
         <div class="flex float-right w-[5rem] h-full items-center hover:bg-blue-300" @click="toggleSidebar">
           <div class="w-full text-center hover:cursor-pointer">
             <el-icon :class="sidebarExpanded ? 'sidebar-toggle-arrow' : 'sidebar-toggle-arrow sidebar-toggle-arrow-flipped'">
@@ -46,7 +69,9 @@ const menuStore = useMenuStore()
     <div :class="sidebarExpanded ? 'content-normal' : 'content-wide'">
       <div class="flex w-full h-[5rem] bg-orange-200">
         <div class="flex w-fit h-full text-[1.5rem] items-center">Hello, <span class="text-[1.8rem] font-bold">{{ getFullName() }}</span></div>
-        <div class="absolute flex right-[1rem] h-[5rem] float-right items-center text-[1.5rem] pl-[1rem] pr-[1rem] hover:bg-orange-300 hover:cursor-pointer">Logout</div>
+        <div
+          class="absolute flex right-[1rem] h-[5rem] float-right items-center text-[1.5rem] pl-[1rem] pr-[1rem] hover:bg-orange-300 hover:cursor-pointer"
+          @click="logout">Logout</div>
       </div>
       <div class="w-full h-[calc(100%-5rem)] p-[0.2rem]">
         <router-view/>

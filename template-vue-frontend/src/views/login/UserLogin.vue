@@ -61,7 +61,7 @@ onBeforeMount(() => {
         <el-col :span="8"></el-col>
         <el-col :span="8">
           <el-form-item prop="username">
-            <el-input v-model="loginForm.phoneNo"/>
+            <el-input v-model="loginForm.phoneNo" placeholder="Phone Number"/>
           </el-form-item>
         </el-col>
         <el-col :span="8"></el-col>
@@ -70,7 +70,7 @@ onBeforeMount(() => {
         <el-col :span="8"></el-col>
         <el-col :span="8">
           <el-form-item prop="password">
-            <el-input v-model="loginForm.password"/>
+            <el-input v-model="loginForm.password" type="password" placeholder="Password"/>
           </el-form-item>
         </el-col>
         <el-col :span="8"></el-col>
@@ -79,7 +79,7 @@ onBeforeMount(() => {
         <el-col :span="8"></el-col>
         <el-col :span="8">
           <el-form-item prop="captcha">
-            <el-input v-model="loginForm.captcha"/>
+            <el-input v-model="loginForm.captcha" placeholder="Captcha"/>
           </el-form-item>
         </el-col>
         <el-col :span="3">

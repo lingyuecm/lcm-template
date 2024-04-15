@@ -47,12 +47,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (getAccessToken()) {
+  if (getAccessToken() || to.path === '/login') {
     next()
-  } else if (to.path !== '/login') {
+  }
+  else {
     next('/login')
-  } else {
-    next()
   }
 })
 
