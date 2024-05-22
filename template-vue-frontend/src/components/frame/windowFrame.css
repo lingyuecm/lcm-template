@@ -41,3 +41,33 @@
     transform: rotateY(180deg);
     transition-duration: 0.5s;
 }
+.refresh-permissions-button {
+    @apply relative w-[5rem] h-full text-green-500 hover:cursor-pointer hover:bg-blue-300;
+}
+.refresh-refreshing {
+    @apply text-red-500;
+    animation: refreshing 1s ease-in-out infinite;
+}
+@keyframes refreshing {
+    from {
+        transform: rotateZ(0deg);
+    }
+    to {
+        transform: rotateZ(-360deg);
+    }
+}
+.el-icon[id="key"] {
+    width: 50%;
+    height: 50%;
+    margin: 25%;
+    font-size: 1.5rem;
+}
+.el-icon[id="refresh"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 90%;
+    height: 90%;
+    margin: 5%;
+    font-size: 4.5rem;
+}

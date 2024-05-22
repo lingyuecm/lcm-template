@@ -8,3 +8,9 @@ export type PagedList<T> = {
     totalCount: number,
     dataList: T[]
 }
+
+export type Menu = {
+    menuTitle: string,
+    menuUrl: string,
+    children?: Menu[]
+}

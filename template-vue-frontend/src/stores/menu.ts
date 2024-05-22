@@ -1,37 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-
-export type Menu = {
-  title: string,
-  path: string,
-  children?: Menu[]
-}
+import type { Menu } from '@/model/model'
 
 export const useMenuStore = defineStore('menu', () => {
-  const menuTree = ref<Menu[]>([
-    {
-      title: 'Dashboard',
-      path: '/'
-    },
-    {
-      title: 'Backend Management',
-      path: '/',
-      children: [
-        {
-          title: 'User Management',
-          path: '/backendMgmt/userMgmt'
-        },
-        {
-          title: 'Role Management',
-          path: '/backendMgmt/roleMgmt'
-        },
-        {
-          title: 'Permission Management',
-          path: '/backendMgmt/permissionMgmt'
-        }
-      ]
-    }
-  ])
+  const menuTree = ref<Menu[]>([])
 
   function setMenuTree(menus: Menu[]) {
     menuTree.value = menus

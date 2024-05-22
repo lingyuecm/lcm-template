@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingyuecm.mapper.MenuMapper">
+    <sql id="userMenusCondition">
+        <![CDATA[ AND MENU_ID IN (
+            SELECT MENU_ID
+            FROM MAP_ROLE_MENU
+            WHERE ROLE_ID IN (
+                SELECT ROLE_ID
+                FROM MAP_USER_ROLE
+                WHERE USER_ID = #{userId})) ]]>
+    </sql>
+    <resultMap id="grantedMenuMap"
+               type="com.lingyuecm.dto.ConfMenuDto">
+        <result column="MENU_TITLE" property="menuTitle"/>
+        <result column="MENU_URL" property="menuUrl"/>
+        <collection property="children"
+                    ofType="com.lingyuecm.dto.ConfMenuDto"
+                    column="{parentId=parentId}"
+                    select="selectChildrenMenus"/>
+    </resultMap>
+    <select id="selectGrantedMenus"
+            resultMap="grantedMenuMap">
+        <bind name="userId" value="@com.lingyuecm.utils.ContextUtils@getUserId()"/>
+        SELECT MENU_ID AS parentId,
+               MENU_TITLE,
+               MENU_URL
+        FROM CONF_MENU
+        WHERE PARENT_ID = 0
+        <include refid="userMenusCondition"/>;
+    </select>
+    <select id="selectChildrenMenus"
+            resultMap="grantedMenuMap">
+        <bind name="userId" value="@com.lingyuecm.utils.ContextUtils@getUserId()"/>
+        SELECT MENU_ID AS parentId,
+               MENU_TITLE,
+               MENU_URL
+        FROM CONF_MENU
+        WHERE PARENT_ID = #{parentId}
+        <include refid="userMenusCondition"/>;
+    </select>
+</mapper>

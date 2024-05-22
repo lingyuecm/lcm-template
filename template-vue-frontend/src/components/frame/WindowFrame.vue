@@ -3,16 +3,20 @@ import { useSidebarStore } from '@/stores/sidebar'
 import { storeToRefs } from 'pinia'
 import { useMenuStore } from '@/stores/menu'
 import SidebarItem from '@/components/frame/SidebarItem.vue'
-import { ArrowLeft } from '@element-plus/icons-vue'
+import { ArrowLeft, Key, Refresh } from '@element-plus/icons-vue'
 import { usePersonStore } from '@/stores/person'
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { logoutApi, metadataApi } from '@/api/userApi'
 import { removeAccessToken } from '@/utils/cacheManager'
+import { refreshPermissionsApi } from '@/api/permissionApi'
 
 const sidebarStore = useSidebarStore()
 const { sidebarExpanded } = storeToRefs(sidebarStore)
 
 const personStore = usePersonStore()
+const menuStore = useMenuStore()
+
+const refreshing = ref<Boolean>(false);
 
 const toggleSidebar = () => {
   sidebarStore.toggleSidebar()
@@ -33,6 +37,17 @@ const logout = () => {
     })
 }
 
+const refreshPermissions = () => {
+  if (refreshing.value) {
+    return
+  }
+  refreshing.value = true
+  refreshPermissionsApi()
+    .then(() => {
+      refreshing.value = false
+    })
+}
+
 onBeforeMount(() => {
   if (!personStore.personName.firstName && !personStore.personName.lastName) {
     metadataApi()
@@ -40,18 +55,27 @@ onBeforeMount(() => {
       personStore.setPersonName({
         firstName: response.resultBody.firstName,
         lastName: response.resultBody.lastName
-      })
+      });
+      menuStore.setMenuTree(response.resultBody.grantedMenus);
     }).catch(() => {})
   }
 })
-
-const menuStore = useMenuStore()
 </script>
 <template>
   <div class="flex h-full">
     <div :class="sidebarExpanded ? 'sidebar-expanded' : 'sidebar-normal'">
       <div class="h-[5rem]">
-        <div :style="{display: sidebarExpanded ? 'inline-block' : 'none'}" class="w-[5rem] h-full hover:cursor-pointer hover:bg-blue-300">AAA</div>
+        <div
+          :style="{display: sidebarExpanded ? 'inline-block' : 'none', borderRadius: '50%'}"
+          :class="refreshing ? 'refresh-permissions-button refresh-refreshing' : 'refresh-permissions-button'"
+          @click="refreshPermissions">
+          <el-icon id="key">
+            <Key/>
+          </el-icon>
+          <el-icon id="refresh">
+            <Refresh/>
+          </el-icon>
+        </div>
         <div class="flex float-right w-[5rem] h-full items-center hover:bg-blue-300" @click="toggleSidebar">
           <div class="w-full text-center hover:cursor-pointer">
             <el-icon :class="sidebarExpanded ? 'sidebar-toggle-arrow' : 'sidebar-toggle-arrow sidebar-toggle-arrow-flipped'">

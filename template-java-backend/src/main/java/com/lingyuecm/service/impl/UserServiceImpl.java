@@ -5,8 +5,10 @@ import com.lingyuecm.common.PagedList;
 import com.lingyuecm.dto.AccessTokenDto;
 import com.lingyuecm.dto.BizUserDto;
 import com.lingyuecm.dto.CaptchaDto;
+import com.lingyuecm.dto.ConfMenuDto;
 import com.lingyuecm.dto.LoginDto;
 import com.lingyuecm.exception.LcmRuntimeException;
+import com.lingyuecm.mapper.MenuMapper;
 import com.lingyuecm.mapper.UserMapper;
 import com.lingyuecm.model.BizUser;
 import com.lingyuecm.service.CacheService;
@@ -46,6 +48,8 @@ public class UserServiceImpl implements UserService {
     private CacheService cacheService;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private MenuMapper menuMapper;
     @Resource
     private StringRedisTemplate redisTemplate;
     @Resource
@@ -111,7 +115,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BizUserDto getMetadata() {
-        return this.userMapper.selectMetadata();
+        BizUserDto result = this.userMapper.selectMetadata();
+        List<ConfMenuDto> grantedMenus = this.menuMapper.selectGrantedMenus();
+        if (null == grantedMenus) {
+            grantedMenus = new ArrayList<>();
+        }
+        result.setGrantedMenus(grantedMenus);
+
+        return result;
     }
 
     @Override

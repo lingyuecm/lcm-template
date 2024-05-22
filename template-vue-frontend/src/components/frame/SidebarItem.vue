@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Menu } from '@/stores/menu'
+import type { Menu } from '@/model/model'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -32,12 +32,12 @@ function onMenuItemClick(path: string) {
 
 <template>
   <div>
-    <div v-if="props.item.children">
+    <div v-if="props.item.children && props.item.children.length > 0">
       <div :style="{
       textIndent: props.indent + 'ch'
     }" class="sidebar-item-base"
       @click="onSubMenuClick">
-        <span>{{ props.item.title }}</span>
+        <span>{{ props.item.menuTitle }}</span>
         <el-icon
           :class="subMenuExpanded ? 'sub-menu-arrow sub-menu-arrow-expanded' : 'sub-menu-arrow'">
           <ArrowDown/>
@@ -54,9 +54,9 @@ function onMenuItemClick(path: string) {
     <div v-else>
       <div
         :style="{textIndent: props.indent + 'ch'}"
-        :class="isCurrentMenu(props.item.path) ? 'sidebar-item-base sidebar-item-current' : 'sidebar-item-base'"
-        @click="onMenuItemClick(props.item.path)">
-        <span>{{ props.item.title }}</span>
+        :class="isCurrentMenu(props.item.menuUrl) ? 'sidebar-item-base sidebar-item-current' : 'sidebar-item-base'"
+        @click="onMenuItemClick(props.item.menuUrl)">
+        <span>{{ props.item.menuTitle }}</span>
       </div>
     </div>
     <div class="w-full h-[1px] bg-blue-300"></div>

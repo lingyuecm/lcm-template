@@ -39,7 +39,20 @@ create table CONF_PERMISSION
 )
     comment 'The permissions to the APIs';
 
-
+create table CONF_MENU
+(
+    MENU_ID      int auto_increment comment 'The primary key'
+        primary key,
+    MENU_TITLE   varchar(128)  null comment 'The title of the menu',
+    MENU_URL     varchar(1024) null comment 'The url of the menu',
+    PARENT_ID    int           null comment 'The primary key to the parent menu',
+    STATUS       int           null,
+    CREATED_BY   bigint        null,
+    TIME_CREATED datetime      null,
+    UPDATED_BY   bigint        null,
+    TIME_UPDATED datetime      null
+)
+    comment 'The menus on the web pages';
 
 create table MAP_USER_ROLE
 (
@@ -49,8 +62,6 @@ create table MAP_USER_ROLE
     ROLE_ID    int    null comment 'The role ID'
 )
     comment 'The mappings between the users and the roles';
-
-
 
 create table MAP_ROLE_PERMISSION
 (
@@ -62,5 +73,10 @@ create table MAP_ROLE_PERMISSION
 )
     comment 'The mappings between roles and permissions';
 
-
-
+create table MAP_ROLE_MENU
+(
+    MAPPING_ID bigint auto_increment comment 'The primay key'
+        primary key,
+    ROLE_ID    int null,
+    MENU_ID    int null
+);
